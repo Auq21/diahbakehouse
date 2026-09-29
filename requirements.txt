@@ -1,0 +1,6 @@
+Flask==3.0.3
+Flask-Mail==0.10.0
+weasyprint==63.1
+midtransclient==1.4.2
+python-dotenv==1.0.1
+gunicorn==22.0.0

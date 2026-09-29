@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brownies Lumer Cup — @diahbakehouse</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f5f0eb;
+    color: #2a1a0e;
+  }
+
+  /* ───── PRINT SETTINGS ───── */
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; page-break-after: always; }
+    .page:last-child { page-break-after: avoid; }
+    .print-btn { display: none !important; }
+    @page { size: A4; margin: 0; }
+  }
+
+  /* ───── SCREEN WRAPPER ───── */
+  .screen-wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  .print-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #5C2D0A;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
+  }
+  .print-btn:hover { background: #7a3e14; }
+
+  /* ───── PAGE BASE ───── */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    margin: 0 auto 32px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ══════════════════════════════
+     PAGE 1 — COVER
+  ══════════════════════════════ */
+  .cover {
+    min-height: 297mm;
+    background: linear-gradient(160deg, #3D1608 0%, #7A3212 45%, #A0522D 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 48px;
+    text-align: center;
+    position: relative;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(255,200,100,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(255,150,50,0.06) 0%, transparent 50%);
+  }
+  .cover-inner { position: relative; z-index: 1; }
+  .cover-brand {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: #D4956A;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .cover-emoji { font-size: 56px; margin-bottom: 20px; display: block; }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: #FDF6EE;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .cover-title span { color: #F5C07A; }
+  .cover-tagline {
+    font-size: 16px;
+    color: #D4956A;
+    font-style: italic;
+    margin-bottom: 40px;
+    font-family: 'Playfair Display', serif;
+  }
+  .cover-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(to right, transparent, #D4956A, transparent);
+    margin: 0 auto 40px;
+  }
+  .cover-stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .cstat { text-align: center; }
+  .cstat-n {
+    font-size: 26px;
+    font-weight: 600;
+    color: #F5C07A;
+    display: block;
+  }
+  .cstat-l {
+    font-size: 10px;
+    color: #C8856A;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .cover-ig {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 8px 20px;
+    color: #FDF6EE;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+  }
+  .cover-footer {
+    position: absolute;
+    bottom: 32px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(212,149,106,0.6);
+    letter-spacing: 0.06em;
+  }
+
+  /* ══════════════════════════════
+     PAGE 2 — BAHAN-BAHAN
+  ══════════════════════════════ */
+  .page-inner { padding: 40px 44px; }
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #5C2D0A;
+    margin-bottom: 28px;
+  }
+  .page-header-left h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    color: #3D1608;
+  }
+  .page-header-left p {
+    font-size: 11px;
+    color: #9C6A45;
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+  }
+  .page-num {
+    font-size: 11px;
+    color: #C8856A;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+  .page-logo {
+    font-size: 10px;
+    color: #C8856A;
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+  .page-logo span { display: block; font-weight: 600; color: #7A3212; font-size: 11px; }
+
+  .bahan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .bahan-card {
+    border: 1px solid #E8D5C4;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .bahan-card-head {
+    background: #5C2D0A;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .bahan-card-head.b { background: #7A3212; }
+  .bahan-card-head.c { background: #A0522D; }
+  .bahan-card-head.d { background: #3D1608; }
+  .bahan-card-head h3 { font-size: 12px; font-weight: 600; color: white; letter-spacing: 0.04em; }
+  .bahan-card-head p { font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 1px; }
+  .bahan-card-body { padding: 10px 14px; }
+  .bahan-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px dashed #EDE0D4;
+    color: #4A2C12;
+  }
+  .bahan-row:last-child { border-bottom: none; }
+  .bahan-qty { color: #7A3212; font-weight: 600; font-size: 11px; }
+
+  .alat-box {
+    background: #FDF6EE;
+    border: 1px solid #E8D5C4;
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .alat-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .alat-box h4 { font-size: 12px; font-weight: 600; color: #3D1608; margin-bottom: 4px; }
+  .alat-box p { font-size: 11px; color: #7A5C45; line-height: 1.6; }
+
+  /* ══════════════════════════════
+     STEPS
+  ══════════════════════════════ */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #3D1608;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, #D4956A, transparent);
+  }
+
+  .step-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #F0E6DA;
+  }
+  .step-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .step-num {
+    min-width: 32px; height: 32px;
+    background: #5C2D0A;
+    color: white;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-content h4 { font-size: 13px; font-weight: 600; color: #3D1608; margin-bottom: 4px; }
+  .step-content p { font-size: 12px; color: #6B4423; line-height: 1.65; }
+  .tag-warn {
+    display: inline-block;
+    background: #FEF0E7;
+    border: 1px solid #F5C5A0;
+    color: #8B3A0F;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+  .tag-tip {
+    display: inline-block;
+    background: #E8F5EE;
+    border: 1px solid #A0D5B8;
+    color: #1A6B45;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  /* ══════════════════════════════
+     PAGE 4 — TIPS, FAQ, UNTUNG
+  ══════════════════════════════ */
+  .tips-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .tip-card {
+    background: #FDF6EE;
+    border: 1px solid #E8D5C4;
+    border-radius: 10px;
+    padding: 14px;
+  }
+  .tip-card .icon { font-size: 20px; margin-bottom: 8px; }
+  .tip-card h4 { font-size: 12px; font-weight: 600; color: #3D1608; margin-bottom: 4px; }
+  .tip-card p { font-size: 11px; color: #7A5C45; line-height: 1.55; }
+
+  .faq-item {
+    padding: 10px 0;
+    border-bottom: 1px dashed #E8D5C4;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item .q { font-size: 12px; font-weight: 600; color: #3D1608; margin-bottom: 3px; }
+  .faq-item .a { font-size: 11px; color: #7A5C45; line-height: 1.6; }
+
+  .hpp-box {
+    background: #FDF6EE;
+    border: 1px solid #E8D5C4;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .hpp-head {
+    background: #5C2D0A;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+  .hpp-body { padding: 4px 0; }
+  .hpp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    padding: 7px 18px;
+    border-bottom: 1px dashed #EDE0D4;
+  }
+  .hpp-row:last-child { border-bottom: none; }
+  .hpp-label { color: #6B4423; }
+  .hpp-val { font-weight: 600; color: #3D1608; }
+  .hpp-val.green { color: #1A6B45; }
+
+  /* ══════════════════════════════
+     PAGE 5 — CHEATSHEET
+  ══════════════════════════════ */
+  .cs-page {
+    min-height: 297mm;
+    padding: 28px 32px;
+    background: white;
+  }
+  .cs-header {
+    background: linear-gradient(135deg, #3D1608 0%, #7A3212 100%);
+    border-radius: 12px;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .cs-header h1 { font-family: 'Playfair Display', serif; font-size: 22px; color: #FDF6EE; }
+  .cs-header p { font-size: 11px; color: #D4956A; margin-top: 2px; }
+  .cs-header-right {
+    text-align: right;
+    font-size: 10px;
+    color: #D4956A;
+    letter-spacing: 0.06em;
+  }
+  .cs-header-right strong { display: block; font-size: 12px; color: #F5C07A; }
+  .cs-body { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cs-card {
+    border: 1px solid #E8D5C4;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .cs-card-head {
+    background: #5C2D0A;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    letter-spacing: 0.04em;
+  }
+  .cs-card-head.b { background: #7A3212; }
+  .cs-card-head.c { background: #A0522D; }
+  .cs-card-head.d { background: #3D1608; }
+  .cs-card-head.e { background: #2A5C3A; }
+  .cs-card-head.f { background: #1A4A6B; }
+  .cs-card-head.g { background: #4A2C12; }
+  .cs-card-body { padding: 8px 12px; background: #FFFBF8; }
+  .cs-brow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 3px 0;
+    border-bottom: 1px dashed #EDE0D4;
+    color: #4A2C12;
+  }
+  .cs-brow:last-child { border-bottom: none; }
+  .cs-brow span:last-child { color: #7A3212; font-weight: 600; }
+  .cs-step {
+    display: flex;
+    gap: 7px;
+    padding: 4px 0;
+    border-bottom: 1px dashed #EDE0D4;
+    font-size: 11px;
+    color: #4A2C12;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .cs-step:last-child { border-bottom: none; }
+  .cs-sn {
+    min-width: 18px; height: 18px;
+    background: #5C2D0A; color: white;
+    border-radius: 50%; font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .cs-tw { display: inline-block; background: #FEF0E7; color: #8B3A0F; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-top: 2px; font-weight: 500; }
+  .cs-tt { display: inline-block; background: #E8F5EE; color: #1A6B45; font-size: 9px; padding: 1px 5px; border-radius: 3px; margin-top: 2px; font-weight: 500; }
+  .cs-top { display: flex; flex-wrap: wrap; gap: 5px; padding: 8px 0; }
+  .cs-top-pill { background: #F5E6D3; border: 1px solid #D4956A; border-radius: 20px; font-size: 10px; color: #5C2D0A; padding: 2px 9px; font-weight: 500; }
+  .cs-hpp { font-size: 11px; }
+  .cs-hpp .hr { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #EDE0D4; color: #4A2C12; }
+  .cs-hpp .hr:last-child { border-bottom: none; }
+  .cs-hpp .hr span:last-child { font-weight: 600; color: #1A6B45; }
+  .cs-footer {
+    text-align: center;
+    font-size: 10px;
+    color: #9C6A45;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #E8D5C4;
+    letter-spacing: 0.04em;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 44px; right: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 10px;
+    color: #C8856A;
+  }
+</style>
+</head>
+<body>
+
+<div class="screen-wrap">
+  <button class="print-btn" onclick="window.print()">🖨️ Simpan sebagai PDF — Ctrl+P → Save as PDF</button>
+
+  <!-- ══ PAGE 1: COVER ══ -->
+  <div class="page">
+    <div class="cover">
+      <div class="cover-inner">
+        <div class="cover-brand">Resep Original · Anti Gagal · Siap Jual</div>
+        <span class="cover-emoji">🍫</span>
+        <h1 class="cover-title">Brownies<br><span>Lumer</span> Cup</h1>
+        <p class="cover-tagline">"Lumer di Mulut, Nagih Banget!"</p>
+        <div class="cover-divider"></div>
+        <div class="cover-stats">
+          <div class="cstat"><span class="cstat-n">18</span><span class="cstat-l">cup / resep</span></div>
+          <div class="cstat"><span class="cstat-n">10–15'</span><span class="cstat-l">waktu kukus</span></div>
+          <div class="cstat"><span class="cstat-n">Rp 6rb</span><span class="cstat-l">harga jual</span></div>
+          <div class="cstat"><span class="cstat-n">Mudah</span><span class="cstat-l">tingkat</span></div>
+        </div>
+        <div class="cover-ig">📸 &nbsp;@diah_bakehouse</div>
+      </div>
+      <div class="cover-footer">Panduan Lengkap dari Bahan sampai Siap Jual · @diah_bakehouse</div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE 2: BAHAN ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Bahan-Bahan</h2>
+          <p>Timbang semua bahan sebelum mulai memasak</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 02</div>
+      </div>
+
+      <div class="bahan-grid">
+        <div class="bahan-card">
+          <div class="bahan-card-head">
+            <div><h3>BAHAN A — Cokelat &amp; Lemak</h3><p>Dilelehkan terlebih dahulu</p></div>
+          </div>
+          <div class="bahan-card-body">
+            <div class="bahan-row"><span>DCC (dark cooking chocolate)</span><span class="bahan-qty">50g</span></div>
+            <div class="bahan-row"><span>Mentega / butter</span><span class="bahan-qty">25g</span></div>
+            <div class="bahan-row"><span>Minyak goreng</span><span class="bahan-qty">5 sdm</span></div>
+          </div>
+        </div>
+        <div class="bahan-card">
+          <div class="bahan-card-head b">
+            <div><h3>BAHAN B — Bahan Kering</h3><p>Diayak sebelum digunakan</p></div>
+          </div>
+          <div class="bahan-card-body">
+            <div class="bahan-row"><span>Tepung terigu protein sedang</span><span class="bahan-qty">65g</span></div>
+            <div class="bahan-row"><span>Cokelat bubuk</span><span class="bahan-qty">25g</span></div>
+            <div class="bahan-row"><span>Baking soda</span><span class="bahan-qty">¼ sdt</span></div>
+            <div class="bahan-row"><span>Garam halus</span><span class="bahan-qty">¼ sdt</span></div>
+          </div>
+        </div>
+        <div class="bahan-card">
+          <div class="bahan-card-head c">
+            <div><h3>BAHAN C — Telur &amp; Pemanis</h3><p>Suhu ruang, keluarkan 20 mnt sebelumnya</p></div>
+          </div>
+          <div class="bahan-card-body">
+            <div class="bahan-row"><span>Telur ayam ukuran besar</span><span class="bahan-qty">3 butir</span></div>
+            <div class="bahan-row"><span>Gula pasir</span><span class="bahan-qty">115g</span></div>
+            <div class="bahan-row"><span>SP / ovalet</span><span class="bahan-qty">½ sdt</span></div>
+            <div class="bahan-row"><span>Vanila cair</span><span class="bahan-qty">½ sdt</span></div>
+          </div>
+        </div>
+        <div class="bahan-card">
+          <div class="bahan-card-head d">
+            <div><h3>COKELAT LUMER — Saus Siram</h3><p>Dibuat terpisah setelah brownies matang</p></div>
+          </div>
+          <div class="bahan-card-body">
+            <div class="bahan-row"><span>Susu cair full cream</span><span class="bahan-qty">300ml</span></div>
+            <div class="bahan-row"><span>Cokelat bubuk</span><span class="bahan-qty">20g</span></div>
+            <div class="bahan-row"><span>Maizena</span><span class="bahan-qty">1 sdm</span></div>
+            <div class="bahan-row"><span>Gula pasir</span><span class="bahan-qty">1–2 sdm</span></div>
+            <div class="bahan-row"><span>DCC (dark cooking chocolate)</span><span class="bahan-qty">50g</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alat-box">
+        <div class="alat-icon">🔧</div>
+        <div>
+          <h4>Alat yang Dibutuhkan</h4>
+          <p>Mixer listrik · Spatula · 2 mangkuk tahan panas · Panci untuk tim (double boiler) · Kukusan · Kain lap bersih · Timbangan dapur · 18 cup aluminium foil diameter ±7,5 cm · Loyang datar untuk alas cup</p>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 3: CARA MEMBUAT ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Cara Membuat</h2>
+          <p>Ikuti urutan langkah dengan teliti untuk hasil terbaik</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 03</div>
+      </div>
+
+      <div class="section-title">Membuat Brownies</div>
+      <div style="margin-bottom:24px">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Siapkan semua bahan</h4>
+            <p>Timbang dan siapkan semua bahan sebelum memulai. Susun cup aluminium foil di atas loyang datar. Keluarkan telur dari kulkas 20–30 menit sebelum digunakan.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Lelehkan Bahan A</h4>
+            <p>Tim DCC + mentega di atas panci berisi air mendidih (double boiler), aduk sampai meleleh rata. Tambahkan minyak goreng, aduk rata. Sisihkan hingga benar-benar dingin.</p>
+            <span class="tag-warn">⚠️ Jangan masukkan ke adonan saat masih panas — bisa memasak telur!</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Ayak Bahan B</h4>
+            <p>Ayak tepung, cokelat bubuk, baking soda, dan garam ke satu wadah. Sisihkan.</p>
+            <span class="tag-tip">💡 Jangan skip — cokelat bubuk sering menggumpal dan harus diayak.</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Mixer Bahan C hingga berjejak ⭐ Langkah paling penting!</h4>
+            <p>Masukkan telur, gula, SP, dan vanila ke mangkuk besar. Mixer kecepatan tinggi 5–8 menit sampai mengembang, berubah pucat kekuningan, dan membentuk "pita" saat spatula diangkat.</p>
+            <span class="tag-warn">⚠️ Belum berjejak = brownies bantat. Jangan berhenti terlalu cepat!</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <h4>Masukkan Bahan B</h4>
+            <p>Masukkan Bahan B sedikit demi sedikit. Mixer kecepatan paling rendah hanya sampai rata. Matikan mixer segera.</p>
+            <span class="tag-warn">⚠️ Overmix = adonan turun dan brownies keras. Matikan begitu rata!</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <h4>Lipat masuk Bahan A</h4>
+            <p>Pastikan Bahan A sudah dingin. Tuang ke adonan, aduk dengan spatula gerakan fold (dari bawah ke atas) sampai rata. Jangan diaduk memutar.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <h4>Tuang ke cup &amp; kukus</h4>
+            <p>Panaskan kukusan 10 menit terlebih dahulu. Isi cup ¾ penuh. Lapisi tutup kukusan dengan kain lap bersih sebelum ditutup. Kukus 10–15 menit api sedang.</p>
+            <span class="tag-tip">💡 Kain lap di tutup = uap tidak menetes ke permukaan brownies.</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">8</div>
+          <div class="step-content">
+            <h4>Cek kematangan &amp; angkat</h4>
+            <p>Colok lidi ke tengah. Jika keluar bersih atau hanya ada remah lembap sedikit = matang. Angkat, sisihkan dan dinginkan 15–20 menit sebelum disiram cokelat lumer.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Membuat Cokelat Lumer</div>
+      <div>
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Campur bahan kering + susu</h4>
+            <p>Ayak cokelat bubuk + maizena ke panci. Masukkan gula pasir + susu cair. Aduk rata hingga tidak ada gumpalan sama sekali sebelum dipanaskan.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Masak sambil terus diaduk</h4>
+            <p>Nyalakan api sedang-kecil. Aduk terus tanpa henti sampai mengental dan meletup-letup.</p>
+            <span class="tag-warn">⚠️ Jangan tinggalkan wajan — bisa gosong dalam hitungan detik!</span>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Masukkan DCC, matikan api</h4>
+            <p>Segera matikan api. Masukkan DCC, aduk sampai meleleh sempurna dan menyatu rata dengan saus.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h4>Tunggu dingin, siram &amp; beri topping</h4>
+            <p>Tunggu 10–15 menit hingga sedikit mengental. Siram 1,5–2 sdm per cup. Beri topping sesuai selera: chocochip / keju / oreo / kacang. Lebih nikmat disajikan dingin!</p>
+            <span class="tag-tip">💡 Simpan di kulkas minimal 1 jam sebelum dikemas atau disajikan.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 4: TIPS, FAQ, UNTUNG ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Tips, FAQ &amp; Hitungan Untung</h2>
+          <p>Baca ini sebelum mulai — hemat waktu dan hindari kegagalan</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 04</div>
+      </div>
+
+      <div class="section-title">6 Tips Anti Gagal</div>
+      <div class="tips-grid" style="margin-bottom:24px">
+        <div class="tip-card"><div class="icon">🥚</div><h4>Telur suhu ruang</h4><p>Keluarkan dari kulkas 20–30 mnt sebelum pakai. Telur dingin tidak bisa dimixer sampai berjejak.</p></div>
+        <div class="tip-card"><div class="icon">⏰</div><h4>Panaskan kukusan</h4><p>Kukusan harus mengepul dulu minimal 10 menit sebelum brownies masuk.</p></div>
+        <div class="tip-card"><div class="icon">💧</div><h4>Kain lap di tutup</h4><p>Wajib! Kain menyerap kondensasi agar permukaan brownies tidak basah dan tetap cantik.</p></div>
+        <div class="tip-card"><div class="icon">⚖️</div><h4>Pakai timbangan</h4><p>Selisih 10g bisa mengubah tekstur. Timbangan digital jauh lebih akurat dari perkiraan.</p></div>
+        <div class="tip-card"><div class="icon">❄️</div><h4>Sajikan dingin</h4><p>Simpan di kulkas min. 1 jam. Brownies lumer paling enak dan cantik dalam kondisi dingin.</p></div>
+        <div class="tip-card"><div class="icon">🍫</div><h4>DCC berkualitas</h4><p>Minimal 52% kakao. Brand mudah dicari: Colatta, Tulip. Jangan pakai cokelat susu biasa.</p></div>
+      </div>
+
+      <div class="section-title">Pertanyaan yang Sering Muncul</div>
+      <div style="margin-bottom:24px">
+        <div class="faq-item"><div class="q">Brownies bantat dan tidak mengembang?</div><div class="a">Bahan C belum berjejak saat dimixer, atau overmix setelah tepung masuk. Mixer Bahan C minimal 5–8 menit sampai benar-benar kental dan berjejak.</div></div>
+        <div class="faq-item"><div class="q">Permukaan atas basah dan tidak cantik?</div><div class="a">Uap kukusan menetes ke permukaan. Pastikan kain lap terikat rapat di penutup kukusan sebelum ditutup.</div></div>
+        <div class="faq-item"><div class="q">Cokelat lumer terlalu kental atau terlalu cair?</div><div class="a">Terlalu kental → tambah susu cair sedikit sambil diaduk. Terlalu cair → panaskan kembali api kecil sambil terus diaduk.</div></div>
+        <div class="faq-item"><div class="q">Berapa lama brownies ini tahan?</div><div class="a">Suhu ruang: 1 hari. Di kulkas dalam wadah tertutup: 3–4 hari. Selalu informasikan cara penyimpanan kepada pembeli.</div></div>
+        <div class="faq-item"><div class="q">Bisa dikirim jarak jauh?</div><div class="a">Untuk same-day dalam kota bisa — kemas dengan ice pack kecil. Untuk antar kota, brownies kukus kurang cocok karena mudah rusak.</div></div>
+      </div>
+
+      <div class="section-title">Hitungan Untung per Resep</div>
+      <div class="hpp-box">
+        <div class="hpp-head">💰 Simulasi Keuntungan — Harga Jual Rp 6.000 / cup</div>
+        <div class="hpp-body">
+          <div class="hpp-row"><span class="hpp-label">Hasil per resep</span><span class="hpp-val">18 cup</span></div>
+          <div class="hpp-row"><span class="hpp-label">Harga jual per cup</span><span class="hpp-val">Rp 6.000</span></div>
+          <div class="hpp-row"><span class="hpp-label">Omzet 1 resep (18 × Rp 6.000)</span><span class="hpp-val">Rp 108.000</span></div>
+          <div class="hpp-row"><span class="hpp-label">Estimasi modal bahan per resep</span><span class="hpp-val">± Rp 45.000</span></div>
+          <div class="hpp-row"><span class="hpp-label">Keuntungan bersih per resep</span><span class="hpp-val green">± Rp 60.000–65.000</span></div>
+          <div class="hpp-row"><span class="hpp-label">Margin keuntungan</span><span class="hpp-val green">~55–60%</span></div>
+          <div class="hpp-row"><span class="hpp-label">Jika buat 3 resep per hari</span><span class="hpp-val green">± Rp 180.000–195.000 / hari</span></div>
+        </div>
+      </div>
+
+      <div style="background:#FEF0E7;border:1px solid #F5C5A0;border-radius:8px;padding:12px 16px;font-size:11px;color:#6B2A0A;line-height:1.6;">
+        <strong>📌 Catatan:</strong> Modal bisa bervariasi tergantung harga bahan di daerahmu dan brand yang digunakan. Hitung ulang HPP sesuai harga beli aktual untuk angka yang lebih akurat.
+      </div>
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 5: PROMO LAYANAN ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Belajar Lebih Dalam Bareng Diah</h2>
+          <p>Konsultasi pribadi, komunitas, sampai live baking session</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 06</div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#3D1608 0%,#7A3212 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;text-align:center;">
+        <div style="font-size:11px;letter-spacing:0.14em;color:#D4956A;text-transform:uppercase;margin-bottom:8px;">Sudah bisa bikin, tapi masih ada pertanyaan?</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;color:#FDF6EE;margin-bottom:6px;">Saya siap bantu kamu secara langsung 🤎</div>
+        <div style="font-size:12px;color:#D4956A;">Pilih sesi yang paling cocok dengan kebutuhanmu</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
+        <!-- WA Japri -->
+        <div style="border:1px solid #E8D5C4;border-radius:12px;overflow:hidden;">
+          <div style="background:#25D366;padding:12px 14px;text-align:center;">
+            <div style="font-size:26px;margin-bottom:4px;">💬</div>
+            <div style="font-size:12px;font-weight:600;color:white;letter-spacing:0.04em;">Konsultasi WA Japri</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.8);margin-top:2px;">Tanya jawab personal</div>
+          </div>
+          <div style="padding:12px 14px;background:#F9FEF9;">
+            <ul style="font-size:11px;color:#2a1a0e;line-height:1.8;padding-left:14px;margin:0;">
+              <li>Chat langsung 1-on-1 dengan Diah</li>
+              <li>Tanya masalah brownies spesifik kamu</li>
+              <li>Foto adonan / hasil dikirim via WA</li>
+              <li>Dapat feedback &amp; solusi personal</li>
+              <li>Cocok untuk yang butuh jawaban cepat</li>
+            </ul>
+            <div style="margin-top:10px;background:#E8F8EE;border-radius:6px;padding:7px 10px;text-align:center;font-size:11px;color:#1A6B45;font-weight:600;">
+              DM @diah_bakehouse untuk info harga
+            </div>
+          </div>
+        </div>
+
+        <!-- WA Group -->
+        <div style="border:1px solid #E8D5C4;border-radius:12px;overflow:hidden;">
+          <div style="background:#5C2D0A;padding:12px 14px;text-align:center;">
+            <div style="font-size:26px;margin-bottom:4px;">👥</div>
+            <div style="font-size:12px;font-weight:600;color:white;letter-spacing:0.04em;">Grup WA Belajar Bareng</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.75);margin-top:2px;">Komunitas home baker</div>
+          </div>
+          <div style="padding:12px 14px;background:#FFFBF8;">
+            <ul style="font-size:11px;color:#2a1a0e;line-height:1.8;padding-left:14px;margin:0;">
+              <li>Grup eksklusif member Diah Bakehouse</li>
+              <li>Sharing tips &amp; trik baking mingguan</li>
+              <li>Tanya jawab bareng sesama baker</li>
+              <li>Update resep &amp; promo terbaru</li>
+              <li>Motivasi &amp; akuntabilitas bersama</li>
+            </ul>
+            <div style="margin-top:10px;background:#F5E6D3;border-radius:6px;padding:7px 10px;text-align:center;font-size:11px;color:#5C2D0A;font-weight:600;">
+              DM @diah_bakehouse untuk join grup
+            </div>
+          </div>
+        </div>
+
+        <!-- Zoom -->
+        <div style="border:1px solid #E8D5C4;border-radius:12px;overflow:hidden;">
+          <div style="background:#2D8CFF;padding:12px 14px;text-align:center;">
+            <div style="font-size:26px;margin-bottom:4px;">🎥</div>
+            <div style="font-size:12px;font-weight:600;color:white;letter-spacing:0.04em;">Sesi Video Zoom</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.8);margin-top:2px;">Bimbingan tatap muka virtual</div>
+          </div>
+          <div style="padding:12px 14px;background:#F5F9FF;">
+            <ul style="font-size:11px;color:#2a1a0e;line-height:1.8;padding-left:14px;margin:0;">
+              <li>Sesi 1-on-1 atau grup kecil via Zoom</li>
+              <li>Bisa tunjukkan adonan langsung via kamera</li>
+              <li>Diah pantau dan koreksi teknik real-time</li>
+              <li>Rekaman sesi bisa diputar ulang</li>
+              <li>Cocok untuk masalah teknik yang detail</li>
+            </ul>
+            <div style="margin-top:10px;background:#E8F0FF;border-radius:6px;padding:7px 10px;text-align:center;font-size:11px;color:#1A4A9C;font-weight:600;">
+              DM @diah_bakehouse untuk jadwal
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE BAKING -->
+      <div style="background:linear-gradient(135deg,#3D1608 0%,#A0522D 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;display:flex;gap:20px;align-items:center;">
+        <div style="font-size:48px;flex-shrink:0;">🔴</div>
+        <div style="flex:1;">
+          <div style="font-size:10px;letter-spacing:0.14em;color:#F5C07A;text-transform:uppercase;margin-bottom:6px;">Event Spesial · Segera Hadir</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px;color:#FDF6EE;margin-bottom:6px;">Live Baking Session — Brownies Lumer Cup</div>
+          <div style="font-size:12px;color:#D4956A;line-height:1.7;">
+            Ikut masak bareng Diah secara langsung! Kamu bisa lihat proses dari awal sampai jadi, tanya langsung saat sesi berlangsung, dan praktik di dapur masing-masing bersamaan.
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:#FDF6EE;">📹 Live via Zoom / IG Live</span>
+            <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:#FDF6EE;">🎓 Bisa tanya langsung</span>
+            <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:#FDF6EE;">📦 Termasuk resep digital</span>
+            <span style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:4px 12px;font-size:10px;color:#FDF6EE;">🔔 Slot terbatas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="background:#FDF6EE;border:1px solid #E8D5C4;border-radius:12px;padding:16px 20px;text-align:center;">
+        <div style="font-size:13px;font-weight:600;color:#3D1608;margin-bottom:4px;">Tertarik? Yuk langsung hubungi Diah! 🤎</div>
+        <div style="font-size:12px;color:#7A5C45;margin-bottom:12px;">Semua layanan bisa ditanyakan langsung via DM Instagram atau WhatsApp</div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:#5C2D0A;border-radius:100px;padding:10px 24px;color:white;font-size:13px;font-weight:500;letter-spacing:0.04em;">
+          📸 &nbsp;@diah_bakehouse
+        </div>
+        <div style="font-size:10px;color:#9C6A45;margin-top:8px;letter-spacing:0.04em;">Instagram · WhatsApp · Live Baking · Konsultasi</div>
+      </div>
+
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 6: CHEATSHEET ══ -->
+  <div class="page">
+    <div class="cs-page">
+      <div class="cs-header">
+        <div>
+          <h1>Cheatsheet Brownies Lumer Cup</h1>
+          <p>Cetak & tempel di dapur — panduan cepat saat memasak</p>
+        </div>
+        <div class="cs-header-right">
+          <strong>@diah_bakehouse</strong>
+          18 cup / resep
+        </div>
+      </div>
+
+      <div class="cs-body">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="cs-card">
+            <div class="cs-card-head">BAHAN A — Cokelat &amp; Lemak</div>
+            <div class="cs-card-body">
+              <div class="cs-brow"><span>DCC dark cooking chocolate</span><span>50g</span></div>
+              <div class="cs-brow"><span>Mentega / butter</span><span>25g</span></div>
+              <div class="cs-brow"><span>Minyak goreng</span><span>5 sdm</span></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head b">BAHAN B — Bahan Kering (Ayak dulu)</div>
+            <div class="cs-card-body">
+              <div class="cs-brow"><span>Tepung terigu protein sedang</span><span>65g</span></div>
+              <div class="cs-brow"><span>Cokelat bubuk</span><span>25g</span></div>
+              <div class="cs-brow"><span>Baking soda</span><span>¼ sdt</span></div>
+              <div class="cs-brow"><span>Garam halus</span><span>¼ sdt</span></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head c">BAHAN C — Telur &amp; Pemanis (Suhu ruang)</div>
+            <div class="cs-card-body">
+              <div class="cs-brow"><span>Telur ayam besar</span><span>3 butir</span></div>
+              <div class="cs-brow"><span>Gula pasir</span><span>115g</span></div>
+              <div class="cs-brow"><span>SP / ovalet</span><span>½ sdt</span></div>
+              <div class="cs-brow"><span>Vanila cair</span><span>½ sdt</span></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head d">COKELAT LUMER — Saus Siram</div>
+            <div class="cs-card-body">
+              <div class="cs-brow"><span>Susu cair full cream</span><span>300ml</span></div>
+              <div class="cs-brow"><span>Cokelat bubuk</span><span>20g</span></div>
+              <div class="cs-brow"><span>Maizena</span><span>1 sdm</span></div>
+              <div class="cs-brow"><span>Gula pasir</span><span>1–2 sdm</span></div>
+              <div class="cs-brow"><span>DCC</span><span>50g</span></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head e">PILIHAN TOPPING</div>
+            <div class="cs-card-body">
+              <div class="cs-top">
+                <span class="cs-top-pill">Chocochip</span>
+                <span class="cs-top-pill">Keju parut</span>
+                <span class="cs-top-pill">Oreo hancur</span>
+                <span class="cs-top-pill">Kacang sangrai</span>
+                <span class="cs-top-pill">Keju+Chocochip</span>
+                <span class="cs-top-pill">Original</span>
+              </div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head f">HITUNGAN UNTUNG</div>
+            <div class="cs-card-body">
+              <div class="cs-hpp">
+                <div class="hr"><span>Omzet 1 resep</span><span>Rp 108.000</span></div>
+                <div class="hr"><span>Modal bahan</span><span>± Rp 45.000</span></div>
+                <div class="hr"><span>Untung bersih</span><span>± Rp 60–65 rb</span></div>
+                <div class="hr"><span>3 resep / hari</span><span>± Rp 180–195 rb</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="cs-card">
+            <div class="cs-card-head">LANGKAH BROWNIES</div>
+            <div class="cs-card-body">
+              <div class="cs-step"><div class="cs-sn">1</div><div>Siapkan semua bahan &amp; cup di loyang datar.</div></div>
+              <div class="cs-step"><div class="cs-sn">2</div><div>Tim Bahan A sampai meleleh + tambah minyak. Biarkan <strong>dingin</strong>.<br><span class="cs-tw">⚠️ Jangan masukkan saat masih panas!</span></div></div>
+              <div class="cs-step"><div class="cs-sn">3</div><div>Ayak Bahan B ke satu wadah. Sisihkan.</div></div>
+              <div class="cs-step"><div class="cs-sn">4</div><div>Mixer Bahan C kecepatan tinggi 5–8 menit hingga <strong>berjejak</strong>.<br><span class="cs-tw">⚠️ Kunci utama — jangan berhenti terlalu cepat!</span></div></div>
+              <div class="cs-step"><div class="cs-sn">5</div><div>Masuk Bahan B sedikit demi sedikit. Mixer rendah, asal rata. Matikan.<br><span class="cs-tw">⚠️ Jangan overmix!</span></div></div>
+              <div class="cs-step"><div class="cs-sn">6</div><div>Lipat masuk Bahan A dengan spatula, gerakan fold.</div></div>
+              <div class="cs-step"><div class="cs-sn">7</div><div>Panaskan kukusan 10 mnt. Isi cup ¾ penuh. <strong>Lapisi tutup dengan kain lap.</strong> Kukus 10–15 mnt.<br><span class="cs-tt">💡 Kain lap wajib — cegah uap menetes!</span></div></div>
+              <div class="cs-step"><div class="cs-sn">8</div><div>Cek lidi — bersih/remah sedikit = matang. Angkat, dinginkan 15 mnt.</div></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head b">LANGKAH COKELAT LUMER</div>
+            <div class="cs-card-body">
+              <div class="cs-step"><div class="cs-sn">1</div><div>Ayak cokelat bubuk + maizena ke panci. Masuk gula + susu. Aduk rata, tidak ada gumpalan.</div></div>
+              <div class="cs-step"><div class="cs-sn">2</div><div>Api sedang-kecil. Aduk terus sampai meletup-letup.<br><span class="cs-tw">⚠️ Jangan tinggalkan wajan!</span></div></div>
+              <div class="cs-step"><div class="cs-sn">3</div><div>Matikan api. Masuk DCC, aduk sampai meleleh rata.</div></div>
+              <div class="cs-step"><div class="cs-sn">4</div><div>Tunggu 10–15 mnt. Siram 1,5–2 sdm / cup. Tambah topping.<br><span class="cs-tt">💡 Lebih enak disajikan dingin!</span></div></div>
+            </div>
+          </div>
+          <div class="cs-card">
+            <div class="cs-card-head g">SOLUSI MASALAH UMUM</div>
+            <div class="cs-card-body">
+              <div class="cs-step"><div class="cs-sn" style="background:#7A3212">!</div><div><strong>Bantat?</strong> Bahan C belum berjejak / overmix setelah tepung masuk.</div></div>
+              <div class="cs-step"><div class="cs-sn" style="background:#7A3212">!</div><div><strong>Permukaan basah?</strong> Kain lap di tutup kukusan kurang rapat.</div></div>
+              <div class="cs-step"><div class="cs-sn" style="background:#7A3212">!</div><div><strong>Lumer kental?</strong> Tambah susu cair sedikit demi sedikit.</div></div>
+              <div class="cs-step"><div class="cs-sn" style="background:#7A3212">!</div><div><strong>Lumer cair?</strong> Panaskan kembali api kecil sambil diaduk.</div></div>
+              <div class="cs-step"><div class="cs-sn" style="background:#7A3212">!</div><div><strong>Ketahanan:</strong> Suhu ruang 1 hari · Kulkas 3–4 hari.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-footer">
+        Cheatsheet Brownies Lumer Cup · @diah_bakehouse · "Lumer di Mulut, Nagih Banget!" · Cetak &amp; tempel di dapur kamu
+      </div>
+    </div>
+  </div>
+
+</div><!-- end screen-wrap -->
+</body>
+</html>

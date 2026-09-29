@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terima Kasih — @diah_bakehouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #3D1608 0%, #7A3212 45%, #A0522D 100%); padding: 24px 16px; color: #2a1a0e;
+  }
+  .card { background: #FDF6EE; max-width: 480px; width: 100%; border-radius: 20px; padding: 36px 28px; text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.3); }
+  .emoji { font-size: 56px; }
+  h1 { font-family: 'Playfair Display', serif; color: #3D1608; font-size: 28px; margin: 10px 0 8px; }
+  p { color: #6b4a33; font-size: 15px; line-height: 1.6; margin-bottom: 10px; }
+  .order { display: inline-block; background: #fff; border: 1px dashed #D4956A; border-radius: 8px; padding: 6px 14px; font-size: 13px; color: #7A3212; margin: 8px 0 16px; font-weight: 500; }
+  .tips { background: #fff; border-radius: 12px; padding: 14px 16px; text-align: left; font-size: 14px; color: #6b4a33; margin: 16px 0; }
+  .tips li { margin-left: 18px; margin-bottom: 4px; }
+  .btn { display: inline-block; margin-top: 8px; padding: 12px 24px; background: #5C2D0A; color: #fff; text-decoration: none; border-radius: 100px; font-weight: 500; }
+  .btn.alt { background: transparent; color: #5C2D0A; border: 1.5px solid #5C2D0A; }
+  .state { display: none; }
+  .state.on { display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- LUNAS -->
+  <div class="state" id="st-lunas">
+    <div class="emoji">🎉</div>
+    <h1>Pembayaran Berhasil!</h1>
+    <p>Terima kasih{% if order %}, <b>{{ order.nama }}</b>{% endif %}! Ebook <b>Brownies Lumer Cup</b> sedang kami kirim ke email kamu{% if order %} (<b>{{ order.email }}</b>){% endif %}.</p>
+  </div>
+
+  <!-- PENDING -->
+  <div class="state" id="st-pending">
+    <div class="emoji">⏳</div>
+    <h1>Menunggu Pembayaran</h1>
+    <p>Selesaikan pembayaran sesuai instruksi (Virtual Account / minimarket / QRIS). Begitu lunas, ebook akan <b>otomatis</b> dikirim ke email kamu — halaman ini juga akan update sendiri.</p>
+  </div>
+
+  <!-- GAGAL -->
+  <div class="state" id="st-gagal">
+    <div class="emoji">😔</div>
+    <h1>Pembayaran Tidak Berhasil</h1>
+    <p>Transaksi dibatalkan atau kedaluwarsa. Kamu bisa mencoba membeli lagi.</p>
+    <a href="/#beli" class="btn">Coba Lagi</a>
+  </div>
+
+  {% if order_id %}<div class="order">Order ID: {{ order_id }}</div>{% endif %}
+
+  <ul class="tips">
+    <li>Email biasanya masuk dalam 1–5 menit setelah lunas.</li>
+    <li>Cek folder <b>Spam</b> atau <b>Promosi</b> kalau belum terlihat.</li>
+    <li>Belum masuk juga? DM <b>@diah_bakehouse</b> dan sertakan Order ID di atas.</li>
+  </ul>
+
+  <a href="https://instagram.com/diah_bakehouse" target="_blank" rel="noopener" class="btn alt">Follow @diah_bakehouse</a>
+</div>
+
+<script>
+(function () {
+  const orderId = {{ order_id|tojson }};
+  const LUNAS  = ['settlement', 'capture'];
+  const GAGAL  = ['deny', 'cancel', 'expire', 'failure'];
+
+  function tampil(status) {
+    const id = LUNAS.includes(status) ? 'st-lunas' : GAGAL.includes(status) ? 'st-gagal' : 'st-pending';
+    document.querySelectorAll('.state').forEach(el => el.classList.toggle('on', el.id === id));
+    return id;
+  }
+
+  let state = tampil({{ (status or '')|tojson }});
+  if (!orderId || state !== 'st-pending') return;
+
+  // Polling status tiap 5 detik (maks ~15 menit) sampai lunas / gagal
+  let n = 0;
+  const t = setInterval(async () => {
+    if (++n > 180) return clearInterval(t);
+    try {
+      const r = await fetch('/status/' + encodeURIComponent(orderId));
+      if (!r.ok) return;
+      const d = await r.json();
+      state = tampil(d.status);
+      if (state !== 'st-pending') clearInterval(t);
+    } catch (e) {}
+  }, 5000);
+})();
+</script>
+</body>
+</html>

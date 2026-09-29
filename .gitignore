@@ -1,0 +1,25 @@
+# Rahasia
+.env
+.env.*
+!.env.example
+
+# Database order lokal
+*.db
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# PDF hasil test & backup
+*.pdf
+*.bak
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
