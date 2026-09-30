@@ -38,9 +38,9 @@ app.config.update(
     SECRET_KEY          = os.environ.get('SECRET_KEY', 'ganti-ini-dengan-random-string'),
 
     # Midtrans
-    MIDTRANS_SERVER_KEY = os.environ.get('MIDTRANS_SERVER_KEY', ''),
-    MIDTRANS_CLIENT_KEY = os.environ.get('MIDTRANS_CLIENT_KEY', ''),
-    MIDTRANS_IS_PROD    = os.environ.get('MIDTRANS_IS_PROD', 'false').lower() == 'true',
+    MIDTRANS_SERVER_KEY = os.environ.get('MIDTRANS_SERVER_KEY', '').strip().strip('"\'').strip(),
+    MIDTRANS_CLIENT_KEY = os.environ.get('MIDTRANS_CLIENT_KEY', '').strip().strip('"\'').strip(),
+    MIDTRANS_IS_PROD    = os.environ.get('MIDTRANS_IS_PROD', 'false').strip().strip('"\'').lower() == 'true',
 
     # Email (default Gmail + App Password)
     MAIL_SERVER         = os.environ.get('MAIL_SERVER', 'smtp.gmail.com'),
@@ -290,6 +290,42 @@ def kirim_ulang(order_id):
         return jsonify({'error': f"Order belum lunas (status: {order['status']})"}), 400
     ok = kirim_ebook(order['email'], order['nama'], order_id)
     return jsonify({'terkirim': ok, 'email': order['email']})
+
+
+@app.route('/admin/cek-midtrans')
+def cek_midtrans():
+    """Diagnosa koneksi Midtrans: key apa yang terbaca server & apakah diterima Midtrans."""
+    cek_admin()
+    import base64, requests
+    sk, ck = app.config['MIDTRANS_SERVER_KEY'], app.config['MIDTRANS_CLIENT_KEY']
+    prod = app.config['MIDTRANS_IS_PROD']
+    raw = os.environ.get('MIDTRANS_SERVER_KEY', '')
+    samar = lambda k: (k[:12] + '...' + k[-4:]) if len(k) > 16 else ('(kosong)' if not k else k[:4] + '...')
+    base = 'https://api.midtrans.com' if prod else 'https://api.sandbox.midtrans.com'
+    try:
+        auth = base64.b64encode((sk + ':').encode()).decode()
+        r = requests.get(f'{base}/v2/cek-koneksi-dbh/status',
+                         headers={'Authorization': 'Basic ' + auth, 'Accept': 'application/json'}, timeout=15)
+        body = r.json() if 'json' in r.headers.get('content-type', '') else r.text[:300]
+        kode = str(body.get('status_code', r.status_code)) if isinstance(body, dict) else str(r.status_code)
+        hasil = ('KEY DITERIMA ✅ (404 = order tes memang tidak ada, itu normal)' if kode == '404'
+                 else 'KEY DITOLAK ❌ — Server Key salah / beda environment' if kode == '401'
+                 else f'Status {kode}')
+    except Exception as e:
+        body, hasil = str(e), 'Gagal menghubungi Midtrans'
+    return jsonify({
+        'environment_dipakai': 'PRODUCTION' if prod else 'SANDBOX',
+        'endpoint_dites': base,
+        'server_key_terbaca': samar(sk),
+        'server_key_panjang': len(sk),
+        'server_key_ada_kata_server': 'server' in sk.lower(),
+        'server_key_awalan_SB': sk.startswith('SB-'),
+        'server_key_asli_ada_spasi_atau_kutip': raw != raw.strip().strip('"\'').strip(),
+        'client_key_terbaca': samar(ck),
+        'client_key_ada_kata_client': 'client' in ck.lower(),
+        'hasil_tes': hasil,
+        'respon_midtrans': body,
+    })
 
 
 # ─────────────────────────────────────────
