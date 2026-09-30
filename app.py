@@ -50,6 +50,11 @@ app.config.update(
     MAIL_PASSWORD       = os.environ.get('MAIL_PASSWORD', ''),
     MAIL_DEFAULT_SENDER = ('Diah Bakehouse', os.environ.get('MAIL_USERNAME', '')),
 
+    # Resend (email via HTTPS — dipakai kalau RESEND_API_KEY diisi; Railway memblokir SMTP)
+    RESEND_API_KEY      = os.environ.get('RESEND_API_KEY', '').strip(),
+    MAIL_FROM           = os.environ.get('MAIL_FROM', 'Diah Bakehouse <ebook@diahbakehouse.my.id>').strip(),
+    MAIL_REPLY_TO       = os.environ.get('MAIL_REPLY_TO', '').strip(),
+
     # Produk
     HARGA_EBOOK         = int(os.environ.get('HARGA_EBOOK', 29000)),
     NAMA_PRODUK         = 'Ebook Brownies Lumer Cup — @diah_bakehouse',
@@ -338,25 +343,46 @@ def generate_pdf(nama=None, order_id=None):
     return HTML(string=html_string, base_url=app.root_path).write_pdf()
 
 
+def kirim_email_resend(email, subject, html, text, pdf_bytes, filename):
+    """Kirim email lewat Resend API (HTTPS)."""
+    import base64, requests
+    payload = {
+        'from': app.config['MAIL_FROM'],
+        'to': [email],
+        'subject': subject,
+        'html': html,
+        'text': text,
+        'attachments': [{'filename': filename,
+                         'content': base64.b64encode(pdf_bytes).decode()}],
+    }
+    if app.config['MAIL_REPLY_TO']:
+        payload['reply_to'] = app.config['MAIL_REPLY_TO']
+    r = requests.post('https://api.resend.com/emails', json=payload, timeout=60,
+                      headers={'Authorization': 'Bearer ' + app.config['RESEND_API_KEY']})
+    if r.status_code >= 300:
+        raise RuntimeError(f'Resend error {r.status_code}: {r.text[:500]}')
+
+
 def kirim_ebook(email, nama, order_id):
     """Generate PDF dan kirim ke email buyer. Return True kalau berhasil."""
     try:
         pdf_bytes = generate_pdf(nama, order_id)
-        msg = Message(
-            subject    = '🍫 Ebook Brownies Lumer Cup kamu sudah siap!',
-            recipients = [email],
-        )
-        msg.html = render_template('email_sukses.html', nama=nama, order_id=order_id)
-        msg.body = (f"Halo {nama},\n\nTerima kasih sudah membeli Ebook Brownies Lumer Cup!\n"
-                    f"Ebook terlampir dalam format PDF.\n\nOrder ID: {order_id}\n\n"
-                    "Salam manis,\nDiah — @diah_bakehouse")
-        msg.attach(
-            filename     = 'Brownies-Lumer-Cup-DiahBakehouse.pdf',
-            content_type = 'application/pdf',
-            data         = pdf_bytes,
-        )
-        mail.send(msg)
-        app.logger.info('[OK] Ebook terkirim ke %s — order %s', email, order_id)
+        subject  = '🍫 Ebook Brownies Lumer Cup kamu sudah siap!'
+        filename = 'Brownies-Lumer-Cup-DiahBakehouse.pdf'
+        html = render_template('email_sukses.html', nama=nama, order_id=order_id)
+        text = (f"Halo {nama},\n\nTerima kasih sudah membeli Ebook Brownies Lumer Cup!\n"
+                f"Ebook terlampir dalam format PDF.\n\nOrder ID: {order_id}\n\n"
+                "Salam manis,\nDiah — @diah_bakehouse")
+
+        if app.config['RESEND_API_KEY']:
+            kirim_email_resend(email, subject, html, text, pdf_bytes, filename)
+        else:
+            msg = Message(subject=subject, recipients=[email])
+            msg.html, msg.body = html, text
+            msg.attach(filename=filename, content_type='application/pdf', data=pdf_bytes)
+            mail.send(msg)
+
+        app.logger.warning('[OK] Ebook terkirim ke %s — order %s', email, order_id)
         return True
     except Exception:
         app.logger.exception('[ERROR] Gagal kirim ebook ke %s — order %s', email, order_id)
