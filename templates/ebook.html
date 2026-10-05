@@ -345,7 +345,7 @@
   }
   .hpp-row:last-child { border-bottom: none; }
   .hpp-label { color: #6B4423; }
-  .hpp-val { font-weight: 600; color: #3D1608; }
+  .hpp-val { font-weight: 600; color: #3D1608; white-space: nowrap; padding-left: 12px; }
   .hpp-val.green { color: #1A6B45; }
 
   /* ══════════════════════════════
@@ -493,7 +493,7 @@
         <div class="cover-stats">
           <div class="cstat"><span class="cstat-n">18</span><span class="cstat-l">cup / resep</span></div>
           <div class="cstat"><span class="cstat-n">10–15'</span><span class="cstat-l">waktu kukus</span></div>
-          <div class="cstat"><span class="cstat-n">Rp 6rb</span><span class="cstat-l">harga jual</span></div>
+          <div class="cstat"><span class="cstat-n">Rp 6–7rb</span><span class="cstat-l">harga jual</span></div>
           <div class="cstat"><span class="cstat-n">Mudah</span><span class="cstat-l">tingkat</span></div>
         </div>
         <div class="cover-ig">📸 &nbsp;@diah_bakehouse</div>
@@ -531,7 +531,7 @@
           <div class="bahan-card-body">
             <div class="bahan-row"><span>Tepung terigu protein sedang</span><span class="bahan-qty">65g</span></div>
             <div class="bahan-row"><span>Cokelat bubuk</span><span class="bahan-qty">25g</span></div>
-            <div class="bahan-row"><span>Baking soda</span><span class="bahan-qty">¼ sdt</span></div>
+            <div class="bahan-row"><span>Baking powder</span><span class="bahan-qty">¼ sdt</span></div>
             <div class="bahan-row"><span>Garam halus</span><span class="bahan-qty">¼ sdt</span></div>
           </div>
         </div>
@@ -551,11 +551,11 @@
             <div><h3>COKELAT LUMER — Saus Siram</h3><p>Dibuat terpisah setelah brownies matang</p></div>
           </div>
           <div class="bahan-card-body">
-            <div class="bahan-row"><span>Susu cair full cream</span><span class="bahan-qty">300ml</span></div>
-            <div class="bahan-row"><span>Cokelat bubuk</span><span class="bahan-qty">20g</span></div>
-            <div class="bahan-row"><span>Maizena</span><span class="bahan-qty">1 sdm</span></div>
-            <div class="bahan-row"><span>Gula pasir</span><span class="bahan-qty">1–2 sdm</span></div>
-            <div class="bahan-row"><span>DCC (dark cooking chocolate)</span><span class="bahan-qty">50g</span></div>
+            <div class="bahan-row"><span>Susu UHT full cream</span><span class="bahan-qty">450ml</span></div>
+            <div class="bahan-row"><span>Cokelat bubuk</span><span class="bahan-qty">30g</span></div>
+            <div class="bahan-row"><span>Maizena</span><span class="bahan-qty">10g</span></div>
+            <div class="bahan-row"><span>Gula pasir</span><span class="bahan-qty">2½ sdm</span></div>
+            <div class="bahan-row"><span>DCC (dark cooking chocolate)</span><span class="bahan-qty">75g</span></div>
           </div>
         </div>
       </div>
@@ -603,7 +603,7 @@
           <div class="step-num">3</div>
           <div class="step-content">
             <h4>Ayak Bahan B</h4>
-            <p>Ayak tepung, cokelat bubuk, baking soda, dan garam ke satu wadah. Sisihkan.</p>
+            <p>Ayak tepung, cokelat bubuk, baking powder, dan garam ke satu wadah. Sisihkan.</p>
             <span class="tag-tip">💡 Jangan skip — cokelat bubuk sering menggumpal dan harus diayak.</span>
           </div>
         </div>
@@ -714,22 +714,39 @@
         <div class="faq-item"><div class="q">Bisa dikirim jarak jauh?</div><div class="a">Untuk same-day dalam kota bisa — kemas dengan ice pack kecil. Untuk antar kota, brownies kukus kurang cocok karena mudah rusak.</div></div>
       </div>
 
-      <div class="section-title">Hitungan Untung per Resep</div>
+      <div class="section-title">Rincian Modal per Resep (± 18 cup)</div>
       <div class="hpp-box">
-        <div class="hpp-head">💰 Simulasi Keuntungan — Harga Jual Rp 6.000 / cup</div>
+        <div class="hpp-head">🧾 Modal Bahan &amp; Kemasan — Harga Belanja Aktual</div>
         <div class="hpp-body">
-          <div class="hpp-row"><span class="hpp-label">Hasil per resep</span><span class="hpp-val">18 cup</span></div>
-          <div class="hpp-row"><span class="hpp-label">Harga jual per cup</span><span class="hpp-val">Rp 6.000</span></div>
-          <div class="hpp-row"><span class="hpp-label">Omzet 1 resep (18 × Rp 6.000)</span><span class="hpp-val">Rp 108.000</span></div>
-          <div class="hpp-row"><span class="hpp-label">Estimasi modal bahan per resep</span><span class="hpp-val">± Rp 45.000</span></div>
-          <div class="hpp-row"><span class="hpp-label">Keuntungan bersih per resep</span><span class="hpp-val green">± Rp 60.000–65.000</span></div>
-          <div class="hpp-row"><span class="hpp-label">Margin keuntungan</span><span class="hpp-val green">~55–60%</span></div>
-          <div class="hpp-row"><span class="hpp-label">Jika buat 3 resep per hari</span><span class="hpp-val green">± Rp 180.000–195.000 / hari</span></div>
+          <div class="hpp-row"><span class="hpp-label"><b>A · Dilelehkan</b> — DCC 50 g (4.000), mentega 25 g (900), minyak goreng 5 sdm (450)</span><span class="hpp-val">Rp 5.350</span></div>
+          <div class="hpp-row"><span class="hpp-label"><b>B · Diayak</b> — terigu 65 g (780), cokelat bubuk 25 g (6.300), baking powder + garam (200)</span><span class="hpp-val">Rp 7.280</span></div>
+          <div class="hpp-row"><span class="hpp-label"><b>C · Dimixer</b> — telur 3 butir (4.500), gula pasir 115 g (2.070), SP + vanili cair (500)</span><span class="hpp-val">Rp 7.070</span></div>
+          <div class="hpp-row"><span class="hpp-label"><b>D · Cokelat lumer</b> — cokelat bubuk 30 g (8.400), maizena 10 g (600), gula 2,5 sdm (500), susu UHT 450 ml (8.000), DCC 75 g (6.000)</span><span class="hpp-val">Rp 23.500</span></div>
+          <div class="hpp-row"><span class="hpp-label"><b>E · Kemasan &amp; lain-lain</b> — cup + tutup (17.100), sendok plastik (1.800), topping (7.000), gas (3.000)</span><span class="hpp-val">Rp 28.900</span></div>
+          <div class="hpp-row" style="background:#F7EADF"><span class="hpp-label"><b>Total modal 1 resep</b></span><span class="hpp-val">Rp 72.100</span></div>
+          <div class="hpp-row"><span class="hpp-label">HPP per cup (Rp 72.100 ÷ 18)</span><span class="hpp-val">± Rp 4.000</span></div>
         </div>
       </div>
 
+      <div class="section-title">Simulasi Keuntungan per Resep</div>
+      <div class="hpp-box">
+        <div class="hpp-head">💰 Pilih Harga Jualmu</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <tr style="color:#9C6A45;font-size:11px;">
+            <td style="padding:8px 18px;"></td>
+            <td style="padding:8px 18px;text-align:right;font-weight:600;">Jual Rp 6.000 / cup</td>
+            <td style="padding:8px 18px;text-align:right;font-weight:600;">Jual Rp 7.000 / cup</td>
+          </tr>
+          <tr style="border-top:1px dashed #EDE0D4;"><td style="padding:7px 18px;color:#6B4423;">Omzet (18 cup)</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#3D1608;">Rp 108.000</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#3D1608;">Rp 126.000</td></tr>
+          <tr style="border-top:1px dashed #EDE0D4;"><td style="padding:7px 18px;color:#6B4423;">Modal</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#3D1608;">Rp 72.100</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#3D1608;">Rp 72.100</td></tr>
+          <tr style="border-top:1px dashed #EDE0D4;"><td style="padding:7px 18px;color:#6B4423;">Keuntungan per resep</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">Rp 35.900</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">Rp 53.900</td></tr>
+          <tr style="border-top:1px dashed #EDE0D4;"><td style="padding:7px 18px;color:#6B4423;">Untung dari modal</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">± 50%</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">± 75%</td></tr>
+          <tr style="border-top:1px dashed #EDE0D4;"><td style="padding:7px 18px;color:#6B4423;">Kalau buat 3 resep / hari</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">± Rp 107.700</td><td style="padding:7px 18px;text-align:right;font-weight:600;color:#1A6B45;">± Rp 161.700</td></tr>
+        </table>
+      </div>
+
       <div style="background:#FEF0E7;border:1px solid #F5C5A0;border-radius:8px;padding:12px 16px;font-size:11px;color:#6B2A0A;line-height:1.6;">
-        <strong>📌 Catatan:</strong> Modal bisa bervariasi tergantung harga bahan di daerahmu dan brand yang digunakan. Hitung ulang HPP sesuai harga beli aktual untuk angka yang lebih akurat.
+        <strong>📌 Catatan:</strong> Angka di atas memakai harga belanja aktual Diah. Harga bisa berbeda tergantung daerah, toko, dan brand — ganti angka di tiap baris dengan harga belanjamu sendiri, lalu jumlahkan ulang. Kemasan (cup + tutup) adalah biaya terbesar kedua, jadi beli grosir untuk menekan HPP.
       </div>
     </div>
     <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
@@ -878,7 +895,7 @@
             <div class="cs-card-body">
               <div class="cs-brow"><span>Tepung terigu protein sedang</span><span>65g</span></div>
               <div class="cs-brow"><span>Cokelat bubuk</span><span>25g</span></div>
-              <div class="cs-brow"><span>Baking soda</span><span>¼ sdt</span></div>
+              <div class="cs-brow"><span>Baking powder</span><span>¼ sdt</span></div>
               <div class="cs-brow"><span>Garam halus</span><span>¼ sdt</span></div>
             </div>
           </div>
@@ -894,11 +911,11 @@
           <div class="cs-card">
             <div class="cs-card-head d">COKELAT LUMER — Saus Siram</div>
             <div class="cs-card-body">
-              <div class="cs-brow"><span>Susu cair full cream</span><span>300ml</span></div>
-              <div class="cs-brow"><span>Cokelat bubuk</span><span>20g</span></div>
-              <div class="cs-brow"><span>Maizena</span><span>1 sdm</span></div>
-              <div class="cs-brow"><span>Gula pasir</span><span>1–2 sdm</span></div>
-              <div class="cs-brow"><span>DCC</span><span>50g</span></div>
+              <div class="cs-brow"><span>Susu UHT full cream</span><span>450ml</span></div>
+              <div class="cs-brow"><span>Cokelat bubuk</span><span>30g</span></div>
+              <div class="cs-brow"><span>Maizena</span><span>10g</span></div>
+              <div class="cs-brow"><span>Gula pasir</span><span>2½ sdm</span></div>
+              <div class="cs-brow"><span>DCC</span><span>75g</span></div>
             </div>
           </div>
           <div class="cs-card">
@@ -918,10 +935,10 @@
             <div class="cs-card-head f">HITUNGAN UNTUNG</div>
             <div class="cs-card-body">
               <div class="cs-hpp">
-                <div class="hr"><span>Omzet 1 resep</span><span>Rp 108.000</span></div>
-                <div class="hr"><span>Modal bahan</span><span>± Rp 45.000</span></div>
-                <div class="hr"><span>Untung bersih</span><span>± Rp 60–65 rb</span></div>
-                <div class="hr"><span>3 resep / hari</span><span>± Rp 180–195 rb</span></div>
+                <div class="hr"><span>Modal 1 resep (18 cup)</span><span>Rp 72.100</span></div>
+                <div class="hr"><span>HPP per cup</span><span>± Rp 4.000</span></div>
+                <div class="hr"><span>Jual Rp 6.000 → untung</span><span>Rp 35.900 (±50%)</span></div>
+                <div class="hr"><span>Jual Rp 7.000 → untung</span><span>Rp 53.900 (±75%)</span></div>
               </div>
             </div>
           </div>
