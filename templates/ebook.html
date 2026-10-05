@@ -475,6 +475,63 @@
     color: rgba(212,149,106,0.75);
     letter-spacing: 0.04em;
   }
+
+  /* ───── UKURAN HURUF PDF (lebih nyaman dibaca di HP) ───── */
+  @media print {
+    .page-inner { padding-left: 40px; padding-right: 40px; }
+    .page-header { margin-bottom: 26px; }
+    .page-header-left h2 { font-size: 30px; }
+    .page-header-left p { font-size: 12.5px; }
+    .page-logo { font-size: 11px; }
+    .page-logo span { font-size: 12px; }
+    .section-title { font-size: 21px; margin-bottom: 14px; }
+    .bahan-grid { gap: 18px; margin-bottom: 24px; }
+    .bahan-card-head { padding: 13px 16px; }
+    .bahan-card-head h3 { font-size: 14px; }
+    .bahan-card-head p { font-size: 11.5px; }
+    .bahan-card-body { padding: 12px 16px; }
+    .bahan-row { font-size: 14.5px; padding: 8px 0; }
+    .bahan-qty { font-size: 14px; }
+    .alat-box h4 { font-size: 14.5px; }
+    .alat-box p { font-size: 13px; }
+    .step-num { width: 28px; height: 28px; font-size: 14px; }
+    .step-content h4 { font-size: 15px; }
+    .step-content p { font-size: 13.5px; line-height: 1.6; }
+    .tag-warn, .tag-tip { font-size: 11.5px; padding: 3px 9px; }
+    .step-item { margin-bottom: 13px; padding-bottom: 13px; }
+    .tip-card { padding: 15px; }
+    .tip-card h4 { font-size: 14px; }
+    .tip-card p { font-size: 12.5px; }
+    .faq-item { padding: 11px 0; }
+    .faq-item .q { font-size: 14px; }
+    .faq-item .a { font-size: 13px; }
+    .hpp-head { font-size: 14px; padding: 12px 18px; }
+    .hpp-row { font-size: 13.5px; padding: 10px 18px; }
+    .hpp-box table { font-size: 14px !important; }
+    .hpp-box td { padding-top: 10px !important; padding-bottom: 10px !important; }
+    .page-footer { font-size: 10.5px; }
+    /* halaman Bahan: isi penuh 1 halaman */
+    .bahan-card-head h3 { font-size: 15px; }
+    .bahan-card-head p { font-size: 12px; }
+    .bahan-row { font-size: 16px; padding: 11px 0; }
+    .bahan-qty { font-size: 15.5px; }
+    .bahan-card-body { padding: 14px 18px; }
+    .alat-box { padding: 18px 20px; }
+    .alat-box h4 { font-size: 16px; margin-bottom: 6px; }
+    .alat-box p { font-size: 14px; line-height: 1.7; }
+    /* langkah lebih rapat supaya 8 langkah muat 1 halaman */
+    .step-item { margin-bottom: 10px; padding-bottom: 10px; }
+    .step-content p { font-size: 13px; line-height: 1.55; }
+    /* angka modal tidak terpotong */
+    .hpp-row { gap: 14px; }
+    .hpp-label { flex: none; width: 80%; }
+    .hpp-val { flex: none; width: 20%; text-align: right; }
+  }
+  .modal-tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .modal-tbl .mrow { border-bottom: 1px dashed #EDE0D4; }
+  .modal-tbl .mrow:last-child { border-bottom: none; }
+  .modal-tbl .mlab { padding: 10px 12px 10px 18px; color: #6B4423; vertical-align: middle; }
+  .modal-tbl .mval { padding: 10px 18px 10px 8px; font-weight: 600; color: #3D1608; text-align: right; white-space: nowrap; vertical-align: middle; width: 1%; }
 </style>
 </head>
 <body>
@@ -576,7 +633,7 @@
     <div class="page-inner">
       <div class="page-header">
         <div class="page-header-left">
-          <h2>Cara Membuat</h2>
+          <h2>Cara Membuat Brownies</h2>
           <p>Ikuti urutan langkah dengan teliti untuk hasil terbaik</p>
         </div>
         <div class="page-logo"><span>@diah_bakehouse</span>hal. 03</div>
@@ -647,6 +704,21 @@
         </div>
       </div>
 
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 4: CARA MEMBUAT COKELAT LUMER ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Cara Membuat Cokelat Lumer</h2>
+          <p>Saus siram yang bikin brownies “lumer di mulut”</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 04</div>
+      </div>
+
       <div class="section-title">Membuat Cokelat Lumer</div>
       <div>
         <div class="step-item">
@@ -680,19 +752,26 @@
           </div>
         </div>
       </div>
+
+      <div class="section-title" style="margin-top:28px">Ide Topping &amp; Penyajian</div>
+      <div class="tips-grid">
+        <div class="tip-card"><div class="icon">🍫</div><h4>Topping favorit</h4><p>Chocochip, keju parut, oreo hancur, kacang sangrai, atau kombinasi keju + chocochip. Versi original tanpa topping juga laris.</p></div>
+        <div class="tip-card"><div class="icon">🧊</div><h4>Sajikan dingin</h4><p>Simpan di kulkas minimal 1 jam sebelum dikemas. Saus jadi lebih set, tampilan cup lebih rapi saat difoto.</p></div>
+        <div class="tip-card"><div class="icon">📦</div><h4>Penyimpanan</h4><p>Suhu ruang ± 1 hari. Di kulkas dalam wadah tertutup 3–4 hari. Selalu informasikan cara simpan ke pembeli.</p></div>
+      </div>
     </div>
     <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
   </div>
 
-  <!-- ══ PAGE 4: TIPS, FAQ, UNTUNG ══ -->
+  <!-- ══ PAGE 5: TIPS & FAQ ══ -->
   <div class="page">
     <div class="page-inner">
       <div class="page-header">
         <div class="page-header-left">
-          <h2>Tips, FAQ &amp; Hitungan Untung</h2>
+          <h2>Tips Anti Gagal &amp; FAQ</h2>
           <p>Baca ini sebelum mulai — hemat waktu dan hindari kegagalan</p>
         </div>
-        <div class="page-logo"><span>@diah_bakehouse</span>hal. 04</div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 05</div>
       </div>
 
       <div class="section-title">6 Tips Anti Gagal</div>
@@ -714,19 +793,34 @@
         <div class="faq-item"><div class="q">Bisa dikirim jarak jauh?</div><div class="a">Untuk same-day dalam kota bisa — kemas dengan ice pack kecil. Untuk antar kota, brownies kukus kurang cocok karena mudah rusak.</div></div>
       </div>
 
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+
+  <!-- ══ PAGE 6: MODAL & UNTUNG ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Modal &amp; Hitungan Untung</h2>
+          <p>Harga belanja aktual Diah — tinggal sesuaikan dengan harga di daerahmu</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 06</div>
+      </div>
+
       <div class="section-title">Rincian Modal per Resep (± 18 cup)</div>
       <div class="hpp-box">
         <div class="hpp-head">🧾 Modal Bahan &amp; Kemasan — Harga Belanja Aktual</div>
-        <div class="hpp-body">
-          <div class="hpp-row"><span class="hpp-label"><b>A · Dilelehkan</b> — DCC 50 g (4.000), mentega 25 g (900), minyak goreng 5 sdm (450)</span><span class="hpp-val">Rp 5.350</span></div>
-          <div class="hpp-row"><span class="hpp-label"><b>B · Diayak</b> — terigu 65 g (780), cokelat bubuk 25 g (6.300), baking powder + garam (200)</span><span class="hpp-val">Rp 7.280</span></div>
-          <div class="hpp-row"><span class="hpp-label"><b>C · Dimixer</b> — telur 3 butir (4.500), gula pasir 115 g (2.070), SP + vanili cair (500)</span><span class="hpp-val">Rp 7.070</span></div>
-          <div class="hpp-row"><span class="hpp-label"><b>D · Cokelat lumer</b> — cokelat bubuk 30 g (8.400), maizena 10 g (600), gula 2,5 sdm (500), susu UHT 450 ml (8.000), DCC 75 g (6.000)</span><span class="hpp-val">Rp 23.500</span></div>
-          <div class="hpp-row"><span class="hpp-label"><b>E · Kemasan &amp; lain-lain</b> — cup + tutup (17.100), sendok plastik (1.800), topping (7.000), gas (3.000)</span><span class="hpp-val">Rp 28.900</span></div>
-          <div class="hpp-row" style="background:#F7EADF"><span class="hpp-label"><b>Total modal 1 resep</b></span><span class="hpp-val">Rp 72.100</span></div>
-          <div class="hpp-row"><span class="hpp-label">HPP per cup (Rp 72.100 ÷ 18)</span><span class="hpp-val">± Rp 4.000</span></div>
-        </div>
-      </div>
+        <table class="modal-tbl">
+          <tr class="mrow"><td class="mlab"><b>A · Dilelehkan</b> — DCC 50 g (4.000), mentega 25 g (900), minyak goreng 5 sdm (450)</td><td class="mval">Rp 5.350</td></tr>
+          <tr class="mrow"><td class="mlab"><b>B · Diayak</b> — terigu 65 g (780), cokelat bubuk 25 g (6.300), baking powder + garam (200)</td><td class="mval">Rp 7.280</td></tr>
+          <tr class="mrow"><td class="mlab"><b>C · Dimixer</b> — telur 3 butir (4.500), gula pasir 115 g (2.070), SP + vanili cair (500)</td><td class="mval">Rp 7.070</td></tr>
+          <tr class="mrow"><td class="mlab"><b>D · Cokelat lumer</b> — cokelat bubuk 30 g (8.400), maizena 10 g (600), gula 2,5 sdm (500), susu UHT 450 ml (8.000), DCC 75 g (6.000)</td><td class="mval">Rp 23.500</td></tr>
+          <tr class="mrow"><td class="mlab"><b>E · Kemasan &amp; lain-lain</b> — cup + tutup (17.100), sendok plastik (1.800), topping (7.000), gas (3.000)</td><td class="mval">Rp 28.900</td></tr>
+          <tr class="mrow" style="background:#F7EADF"><td class="mlab"><b>Total modal 1 resep</b></td><td class="mval">Rp 72.100</td></tr>
+          <tr class="mrow"><td class="mlab">HPP per cup (Rp 72.100 ÷ 18)</td><td class="mval">± Rp 4.000</td></tr>
+        </table>
+              </div>
 
       <div class="section-title">Simulasi Keuntungan per Resep</div>
       <div class="hpp-box">
@@ -752,7 +846,7 @@
     <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
   </div>
 
-  <!-- ══ PAGE 5: PROMO LAYANAN ══ -->
+  <!-- ══ PAGE 7: PROMO LAYANAN ══ -->
   <div class="page">
     <div class="page-inner">
       <div class="page-header">
@@ -760,7 +854,7 @@
           <h2>Belajar Lebih Dalam Bareng Diah</h2>
           <p>Konsultasi pribadi, komunitas, sampai live baking session</p>
         </div>
-        <div class="page-logo"><span>@diah_bakehouse</span>hal. 06</div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 07</div>
       </div>
 
       <div style="background:linear-gradient(135deg,#3D1608 0%,#7A3212 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;text-align:center;">
@@ -866,7 +960,7 @@
     <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
   </div>
 
-  <!-- ══ PAGE 6: CHEATSHEET ══ -->
+  <!-- ══ PAGE 8: CHEATSHEET ══ -->
   <div class="page">
     <div class="cs-page">
       <div class="cs-header">
