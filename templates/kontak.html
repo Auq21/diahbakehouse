@@ -1,0 +1,15 @@
+{% extends "halaman.html" %}
+{% block judul %}Kontak{% endblock %}
+{% block isi %}
+<h2>Hubungi Diah Bakehouse</h2>
+<p>Ada pertanyaan soal ebook, pembayaran, atau ebook belum masuk ke email? Hubungi kami lewat salah satu kontak di bawah ini. Sertakan <b>Order ID</b> kalau pertanyaanmu terkait pesanan.</p>
+<ul>
+  <li><b>Email:</b> <a href="mailto:{{ kontak.email }}">{{ kontak.email }}</a></li>
+  {% if kontak.wa %}<li><b>WhatsApp:</b> <a href="https://wa.me/{{ kontak.wa_link }}" target="_blank" rel="noopener">{{ kontak.wa }}</a></li>{% endif %}
+  <li><b>Instagram:</b> <a href="https://instagram.com/{{ kontak.ig }}" target="_blank" rel="noopener">@{{ kontak.ig }}</a></li>
+  {% if kontak.alamat %}<li><b>Alamat usaha:</b> {{ kontak.alamat }}</li>{% endif %}
+</ul>
+<h2>Jam layanan</h2>
+<p>{{ kontak.jam }}. Pesan di luar jam layanan akan dibalas pada hari kerja berikutnya.</p>
+<div class="info">💡 Ebook dikirim otomatis ke email dalam 1–5 menit setelah pembayaran berhasil. Sebelum menghubungi kami, cek dulu folder <b>Spam</b> atau <b>Promosi</b> di email kamu.</div>
+{% endblock %}

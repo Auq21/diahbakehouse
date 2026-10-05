@@ -1,0 +1,32 @@
+{% extends "halaman.html" %}
+{% block judul %}Kebijakan Refund{% endblock %}
+{% block isi %}
+<p>Karena ebook adalah <b>produk digital</b> yang langsung dapat diakses setelah dikirim, pembelian pada dasarnya <b>tidak dapat dibatalkan atau dikembalikan</b>. Namun kami tetap memberikan pengembalian dana atau solusi pada kondisi berikut.</p>
+
+<h2>Kondisi yang bisa diajukan</h2>
+<ul>
+  <li><b>Ebook tidak diterima</b> dalam 1×24 jam setelah pembayaran berhasil, dan pengiriman ulang juga gagal.</li>
+  <li><b>File rusak / tidak bisa dibuka</b>, dan file pengganti juga tidak bisa dibuka.</li>
+  <li><b>Pembayaran ganda</b> (tertagih lebih dari sekali untuk satu pesanan).</li>
+  <li>Pembayaran berhasil tetapi pesanan <b>tidak tercatat</b> di sistem kami.</li>
+</ul>
+
+<h2>Kondisi yang tidak bisa diajukan</h2>
+<ul>
+  <li>Berubah pikiran setelah ebook diterima.</li>
+  <li>Hasil praktik resep berbeda dengan harapan.</li>
+  <li>Salah memasukkan email — untuk kasus ini kami bantu <b>kirim ulang</b> ke email yang benar, bukan refund.</li>
+</ul>
+
+<h2>Cara mengajukan</h2>
+<ol>
+  <li>Hubungi kami melalui <a href="mailto:{{ kontak.email }}">{{ kontak.email }}</a>{% if kontak.wa %} atau WhatsApp <a href="https://wa.me/{{ kontak.wa_link }}" target="_blank" rel="noopener">{{ kontak.wa }}</a>{% endif %} paling lambat <b>7 hari</b> setelah tanggal pembelian.</li>
+  <li>Sertakan <b>Order ID</b> (contoh: DBH-1790761994-FD9399), nama, email pembelian, dan bukti pembayaran.</li>
+  <li>Kami memeriksa pengajuan dalam <b>maksimal 3 hari kerja</b>.</li>
+</ol>
+
+<h2>Proses pengembalian dana</h2>
+<p>Jika pengajuan disetujui, dana dikembalikan sebesar nilai pembelian melalui transfer bank atau e-wallet atas nama pembeli dalam <b>maksimal 7 hari kerja</b> setelah persetujuan.</p>
+
+<div class="info">💡 Sebagian besar kendala bisa diselesaikan dengan <b>kirim ulang ebook</b>. Cek dulu folder Spam/Promosi di email kamu, lalu hubungi kami kalau masih belum ada.</div>
+{% endblock %}

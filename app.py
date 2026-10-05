@@ -20,7 +20,7 @@ from contextlib import closing
 from dotenv import load_dotenv
 load_dotenv()  # harus paling awal, sebelum WeasyPrint dipakai (WEASYPRINT_DLL_DIRECTORIES)
 
-from flask import Flask, request, jsonify, render_template, abort, Response
+from flask import Flask, request, jsonify, render_template, abort, Response, redirect, url_for
 from flask_mail import Mail, Message
 from werkzeug.middleware.proxy_fix import ProxyFix
 import midtransclient
@@ -54,6 +54,12 @@ app.config.update(
     RESEND_API_KEY      = os.environ.get('RESEND_API_KEY', '').strip(),
     MAIL_FROM           = os.environ.get('MAIL_FROM', 'Diah Bakehouse <ebook@diahbakehouse.my.id>').strip(),
     MAIL_REPLY_TO       = os.environ.get('MAIL_REPLY_TO', '').strip(),
+
+    # Kontak (tampil di halaman Kontak, S&K, Refund, Privasi)
+    KONTAK_EMAIL        = os.environ.get('KONTAK_EMAIL', 'mardiahbakehouse@gmail.com').strip(),
+    KONTAK_WA           = os.environ.get('KONTAK_WA', '').strip(),        # contoh: 0812-3456-7890
+    KONTAK_ALAMAT       = os.environ.get('KONTAK_ALAMAT', '').strip(),    # contoh: Bekasi, Jawa Barat
+    KONTAK_JAM          = os.environ.get('KONTAK_JAM', 'Senin–Sabtu, 08.00–20.00 WIB').strip(),
 
     # Produk
     HARGA_EBOOK         = int(os.environ.get('HARGA_EBOOK', 29000)),
@@ -99,6 +105,33 @@ def init_db():
 init_db()
 
 
+def migrasi_db():
+    """Tambah kolom baru tanpa menghapus data lama."""
+    with closing(db()) as conn, conn:
+        kolom = [r['name'] for r in conn.execute('PRAGMA table_info(orders)')]
+        if 'catatan' not in kolom:
+            conn.execute("ALTER TABLE orders ADD COLUMN catatan TEXT DEFAULT ''")
+
+
+migrasi_db()
+
+
+@app.context_processor
+def inject_kontak():
+    wa = app.config['KONTAK_WA']
+    digits = re.sub(r'\D', '', wa)
+    if digits.startswith('0'):
+        digits = '62' + digits[1:]
+    return {'kontak': {
+        'email': app.config['KONTAK_EMAIL'],
+        'wa': wa, 'wa_link': digits,
+        'alamat': app.config['KONTAK_ALAMAT'],
+        'jam': app.config['KONTAK_JAM'],
+        'ig': 'diah_bakehouse',
+        'berlaku': '5 Oktober 2026',
+    }}
+
+
 def get_order(order_id):
     with closing(db()) as conn:
         return conn.execute('SELECT * FROM orders WHERE order_id = ?', (order_id,)).fetchone()
@@ -121,6 +154,12 @@ def klaim_pengiriman(order_id):
                            'WHERE order_id = ? AND terkirim = 0',
                            (int(time.time()), order_id))
         return cur.rowcount == 1
+
+
+def tandai_terkirim(order_id):
+    with closing(db()) as conn, conn:
+        conn.execute('UPDATE orders SET terkirim = 1, updated_at = ? WHERE order_id = ?',
+                     (int(time.time()), order_id))
 
 
 def batal_klaim(order_id):
@@ -286,15 +325,76 @@ def preview_ebook():
 
 @app.route('/admin/kirim-ulang/<order_id>')
 def kirim_ulang(order_id):
-    """Kirim ulang ebook untuk order yang sudah lunas (misal email buyer salah ketik → update dulu di DB)."""
+    """Kirim ulang ebook untuk order yang sudah lunas / manual."""
     cek_admin()
     order = get_order(order_id)
     if not order:
         abort(404)
-    if order['status'] not in ('settlement', 'capture'):
-        return jsonify({'error': f"Order belum lunas (status: {order['status']})"}), 400
-    ok = kirim_ebook(order['email'], order['nama'], order_id)
-    return jsonify({'terkirim': ok, 'email': order['email']})
+    if order['status'] not in ('settlement', 'capture', 'manual'):
+        pesan, ok = f"Order {order_id} belum lunas (status: {order['status']})", False
+    else:
+        ok = kirim_ebook(order['email'], order['nama'], order_id)
+        if ok:
+            tandai_terkirim(order_id)
+        pesan = (f"Ebook {order_id} terkirim ke {order['email']}" if ok
+                 else f"Gagal kirim ke {order['email']} — cek log Railway")
+    return redirect(url_for('admin', key=request.args.get('key'), pesan=pesan, ok=int(ok)))
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    """Dashboard admin: daftar order + kirim ebook manual (bayar transfer/QRIS manual)."""
+    cek_admin()
+    key = request.args.get('key', '')
+    pesan, sukses = request.args.get('pesan'), request.args.get('ok') == '1'
+
+    if request.method == 'POST':
+        nama    = (request.form.get('nama') or '').strip()[:80]
+        email   = (request.form.get('email') or '').strip().lower()[:120]
+        catatan = (request.form.get('catatan') or '').strip()[:120]
+        if not nama or not EMAIL_RE.match(email):
+            pesan, sukses = 'Nama wajib diisi dan email harus valid.', False
+        else:
+            order_id = f"DBH-M-{int(time.time())}-{hashlib.md5((email + str(time.time_ns())).encode()).hexdigest()[:4].upper()}"
+            now = int(time.time())
+            with closing(db()) as conn, conn:
+                conn.execute('INSERT INTO orders (order_id, nama, email, harga, status, created_at, updated_at, catatan) '
+                             'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                             (order_id, nama, email, app.config['HARGA_EBOOK'], 'manual', now, now, catatan))
+            sukses = kirim_ebook(email, nama, order_id)
+            if sukses:
+                tandai_terkirim(order_id)
+            pesan = (f'Ebook terkirim ke {email} (Order {order_id}).' if sukses
+                     else f'Order {order_id} tercatat, tapi email gagal dikirim — cek log Railway lalu klik "Kirim ulang".')
+        return redirect(url_for('admin', key=key, pesan=pesan, ok=int(sukses)))
+
+    with closing(db()) as conn:
+        rows = conn.execute('SELECT * FROM orders ORDER BY created_at DESC LIMIT 30').fetchall()
+    orders = [dict(r, waktu=time.strftime('%d/%m %H:%M', time.gmtime(r['created_at'] + 7 * 3600))) for r in rows]
+    return render_template('admin.html', orders=orders, key=key, pesan=pesan, sukses=sukses)
+
+
+# ─────────────────────────────────────────
+# HALAMAN INFORMASI (dibutuhkan untuk review Midtrans)
+# ─────────────────────────────────────────
+@app.route('/kontak')
+def kontak():
+    return render_template('kontak.html')
+
+
+@app.route('/syarat-ketentuan')
+def syarat_ketentuan():
+    return render_template('syarat_ketentuan.html')
+
+
+@app.route('/kebijakan-refund')
+def kebijakan_refund():
+    return render_template('kebijakan_refund.html')
+
+
+@app.route('/kebijakan-privasi')
+def kebijakan_privasi():
+    return render_template('kebijakan_privasi.html')
 
 
 @app.route('/admin/cek-midtrans')

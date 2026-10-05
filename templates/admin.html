@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Admin — Diah Bakehouse</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; background: #f5f0eb; color: #2a1a0e; padding: 24px 16px; }
+  .wrap { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 22px; color: #3D1608; margin-bottom: 4px; }
+  h2 { font-size: 17px; color: #3D1608; margin: 0 0 12px; }
+  .sub { color: #9C6A45; font-size: 13px; margin-bottom: 20px; }
+  .card { background: #fff; border: 1px solid #E8D5C4; border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 10px 0 4px; color: #5C2D0A; }
+  input { width: 100%; padding: 10px 12px; border: 1.5px solid #E0C8B4; border-radius: 8px; font: inherit; font-size: 15px; }
+  button, .btn { display: inline-block; margin-top: 14px; padding: 10px 18px; background: #5C2D0A; color: #fff; border: 0; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; font-size: 14px; }
+  .btn.kecil { margin: 0; padding: 5px 10px; font-size: 12px; background: #A0522D; }
+  .msg { padding: 12px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+  .ok { background: #E8F5EE; color: #1A6B45; } .err { background: #fde8e4; color: #9b2c16; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #EDE0D4; white-space: nowrap; }
+  th { color: #9C6A45; font-weight: 600; }
+  .st { padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; background: #eee; }
+  .st.settlement, .st.capture, .st.manual { background: #E8F5EE; color: #1A6B45; }
+  .st.pending { background: #FFF4DB; color: #8a5a00; }
+  .st.expire, .st.cancel, .st.deny, .st.failure { background: #fde8e4; color: #9b2c16; }
+  .hint { font-size: 12px; color: #9C6A45; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Admin Diah Bakehouse</h1>
+  <p class="sub">Halaman ini rahasia — jangan bagikan link-nya.</p>
+
+  {% if pesan %}<div class="msg {{ 'ok' if sukses else 'err' }}">{{ pesan }}</div>{% endif %}
+
+  <div class="card">
+    <h2>📩 Kirim ebook manual</h2>
+    <p class="hint" style="margin:0 0 6px">Untuk pembeli yang bayar lewat transfer / QRIS manual. Pastikan uang sudah masuk sebelum mengirim.</p>
+    <form method="post" action="/admin?key={{ key|urlencode }}">
+      <label for="nama">Nama pembeli</label>
+      <input id="nama" name="nama" required maxlength="80" placeholder="Siti Aminah">
+      <label for="email">Email pembeli</label>
+      <input id="email" name="email" type="email" required maxlength="120" placeholder="siti@gmail.com">
+      <label for="catatan">Catatan (opsional)</label>
+      <input id="catatan" name="catatan" maxlength="120" placeholder="Transfer BCA 5 Okt, Rp 29.000">
+      <button type="submit" onclick="this.disabled=true;this.textContent='Mengirim…';this.form.submit()">Kirim Ebook</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>🧾 30 order terakhir</h2>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Waktu</th><th>Order ID</th><th>Nama</th><th>Email</th><th>Status</th><th>Email</th><th></th></tr>
+      {% for o in orders %}
+      <tr>
+        <td>{{ o.waktu }}</td>
+        <td>{{ o.order_id }}</td>
+        <td>{{ o.nama }}</td>
+        <td>{{ o.email }}</td>
+        <td><span class="st {{ o.status }}">{{ o.status }}</span></td>
+        <td>{{ '✅' if o.terkirim else '—' }}</td>
+        <td>{% if o.status in ('settlement','capture','manual') %}<a class="btn kecil" href="/admin/kirim-ulang/{{ o.order_id }}?key={{ key|urlencode }}">Kirim ulang</a>{% endif %}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">Belum ada order.</td></tr>
+      {% endfor %}
+    </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

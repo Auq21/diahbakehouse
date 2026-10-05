@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block judul %}{% endblock %} — Diah Bakehouse</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Poppins', sans-serif; background: #f5f0eb; color: #2a1a0e; line-height: 1.7; }
+  a { color: #A0522D; }
+  header { background: linear-gradient(160deg, #3D1608 0%, #7A3212 60%, #A0522D 100%); color: #FDF6EE; padding: 28px 16px 36px; }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  .back { color: #F5C07A; text-decoration: none; font-size: 14px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 6vw, 36px); margin-top: 14px; line-height: 1.2; }
+  header p { color: #E8B79A; font-size: 13px; margin-top: 6px; }
+  main { padding: 28px 16px 40px; }
+  .card { background: #fff; border: 1px solid #E8D5C4; border-radius: 16px; padding: 28px 24px; }
+  h2 { font-family: 'Playfair Display', serif; color: #3D1608; font-size: 20px; margin: 26px 0 8px; }
+  h2:first-child { margin-top: 0; }
+  p, li { font-size: 15px; color: #4A2C12; }
+  p + p { margin-top: 10px; }
+  ul, ol { margin: 8px 0 0 22px; }
+  li { margin-bottom: 6px; }
+  .info { background: #FDF6EE; border: 1px dashed #D4956A; border-radius: 10px; padding: 14px 16px; margin-top: 16px; font-size: 14px; }
+  nav.legal { text-align: center; padding: 8px 16px 32px; font-size: 13px; color: #9C6A45; }
+  nav.legal a { color: #7A3212; text-decoration: none; margin: 0 6px; white-space: nowrap; }
+  nav.legal a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="back" href="/">← Kembali ke beranda</a>
+    <h1>{{ self.judul() }}</h1>
+    <p>Diah Bakehouse · Berlaku sejak {{ kontak.berlaku }}</p>
+  </div>
+</header>
+<main><div class="wrap"><div class="card">
+{% block isi %}{% endblock %}
+</div></div></main>
+{% include "_footer_legal.html" %}
+</body>
+</html>

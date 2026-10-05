@@ -1,0 +1,36 @@
+{% extends "halaman.html" %}
+{% block judul %}Kebijakan Privasi{% endblock %}
+{% block isi %}
+<p>Diah Bakehouse menghargai privasimu. Halaman ini menjelaskan data apa yang kami kumpulkan saat kamu membeli ebook di <b>diahbakehouse.my.id</b> dan bagaimana kami menggunakannya.</p>
+
+<h2>Data yang kami kumpulkan</h2>
+<ul>
+  <li><b>Nama</b> dan <b>alamat email</b> yang kamu isi di formulir pembelian.</li>
+  <li><b>Data pesanan</b>: Order ID, nominal, waktu, dan status pembayaran.</li>
+</ul>
+<p>Kami <b>tidak</b> menyimpan data kartu, nomor rekening, PIN, atau data pembayaran lainnya. Seluruh proses pembayaran ditangani langsung oleh Midtrans.</p>
+
+<h2>Untuk apa data digunakan</h2>
+<ul>
+  <li>Memproses pembayaran dan mengirim ebook ke email kamu.</li>
+  <li>Mencantumkan nama pembeli pada ebook sebagai tanda lisensi pribadi.</li>
+  <li>Membantu jika ada kendala pesanan (kirim ulang, refund).</li>
+</ul>
+<p>Kami tidak menjual atau menyewakan data pribadimu kepada pihak mana pun.</p>
+
+<h2>Pihak ketiga yang terlibat</h2>
+<ul>
+  <li><b>Midtrans</b> — memproses pembayaran (menerima nama, email, dan nominal pesanan).</li>
+  <li><b>Layanan pengiriman email</b> — mengirim email berisi ebook ke alamatmu.</li>
+  <li><b>Penyedia hosting</b> — menyimpan data pesanan di server.</li>
+</ul>
+
+<h2>Penyimpanan &amp; keamanan</h2>
+<p>Data pesanan disimpan di server dengan akses terbatas dan koneksi terenkripsi (HTTPS). Data disimpan selama diperlukan untuk layanan purna jual dan pencatatan usaha.</p>
+
+<h2>Hak kamu</h2>
+<p>Sesuai Undang-Undang Pelindungan Data Pribadi (UU No. 27 Tahun 2022), kamu berhak meminta salinan, perbaikan, atau penghapusan data pribadimu. Kirim permintaan ke <a href="mailto:{{ kontak.email }}">{{ kontak.email }}</a> dengan menyertakan Order ID.</p>
+
+<h2>Perubahan kebijakan</h2>
+<p>Kebijakan ini dapat diperbarui sewaktu-waktu. Versi terbaru selalu tersedia di halaman ini.</p>
+{% endblock %}
