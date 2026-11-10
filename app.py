@@ -368,10 +368,89 @@ def admin():
                      else f'Order {order_id} tercatat, tapi email gagal dikirim — cek log Railway lalu klik "Kirim ulang".')
         return redirect(url_for('admin', key=key, pesan=pesan, ok=int(sukses)))
 
+    # Filter & pencarian
+    filter_status = (request.args.get('status') or '').strip()
+    cari          = (request.args.get('q') or '').strip()
+
+    where, params = [], []
+    if filter_status == 'lunas':
+        where.append("status IN ('settlement','capture','manual')")
+    elif filter_status == 'gagal':
+        where.append("status IN ('expire','cancel','deny','failure')")
+    elif filter_status:
+        where.append('status = ?'); params.append(filter_status)
+    if cari:
+        where.append('(nama LIKE ? OR email LIKE ? OR order_id LIKE ?)')
+        params += [f'%{cari}%'] * 3
+    klausa = ('WHERE ' + ' AND '.join(where)) if where else ''
+
+    # Paginasi
+    per_hal = 30
+    try:
+        hal = max(1, int(request.args.get('hal', 1)))
+    except ValueError:
+        hal = 1
+
     with closing(db()) as conn:
-        rows = conn.execute('SELECT * FROM orders ORDER BY created_at DESC LIMIT 30').fetchall()
+        # Statistik global (tidak terpengaruh filter/search)
+        s = conn.execute("""
+            SELECT
+                COUNT(*)                                                           AS total,
+                SUM(CASE WHEN status IN ('settlement','capture','manual') THEN 1 ELSE 0 END)   AS lunas,
+                SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END)                AS pending,
+                SUM(CASE WHEN status IN ('expire','cancel','deny','failure') THEN 1 ELSE 0 END) AS gagal,
+                SUM(CASE WHEN status IN ('settlement','capture','manual') THEN harga ELSE 0 END) AS pendapatan,
+                SUM(CASE WHEN status IN ('settlement','capture','manual') AND terkirim = 0 THEN 1 ELSE 0 END) AS belum_terkirim
+            FROM orders
+        """).fetchone()
+        awal_hari_ini = int(time.time()) - ((int(time.time()) + 7 * 3600) % 86400)  # 00:00 WIB hari ini
+        hari_ini = conn.execute(
+            "SELECT COUNT(*) AS n, "
+            "COALESCE(SUM(CASE WHEN status IN ('settlement','capture','manual') THEN harga ELSE 0 END),0) AS rp "
+            "FROM orders WHERE created_at >= ?", (awal_hari_ini,)).fetchone()
+
+        total_filtered = conn.execute(f'SELECT COUNT(*) FROM orders {klausa}', params).fetchone()[0]
+        rows = conn.execute(
+            f'SELECT * FROM orders {klausa} ORDER BY created_at DESC LIMIT ? OFFSET ?',
+            params + [per_hal, (hal - 1) * per_hal]).fetchall()
+
     orders = [dict(r, waktu=time.strftime('%d/%m %H:%M', time.gmtime(r['created_at'] + 7 * 3600))) for r in rows]
-    return render_template('admin.html', orders=orders, key=key, pesan=pesan, sukses=sukses)
+    total_hal = max(1, (total_filtered + per_hal - 1) // per_hal)
+    stat = {
+        'total': s['total'] or 0, 'lunas': s['lunas'] or 0,
+        'pending': s['pending'] or 0, 'gagal': s['gagal'] or 0,
+        'pendapatan': s['pendapatan'] or 0, 'belum_terkirim': s['belum_terkirim'] or 0,
+        'order_hari_ini': hari_ini['n'] or 0, 'pendapatan_hari_ini': hari_ini['rp'] or 0,
+    }
+
+    return render_template('admin.html', orders=orders, key=key, pesan=pesan, sukses=sukses,
+                           stat=stat, filter_status=filter_status, cari=cari,
+                           hal=hal, total_hal=total_hal, total_filtered=total_filtered)
+
+
+@app.route('/admin/export.csv')
+def admin_export_csv():
+    """Unduh seluruh order sebagai CSV untuk rekap/pembukuan."""
+    cek_admin()
+    import csv, io
+    with closing(db()) as conn:
+        rows = conn.execute('SELECT * FROM orders ORDER BY created_at DESC').fetchall()
+
+    buf = io.StringIO()
+    buf.write('\ufeff')  # BOM supaya Excel membaca UTF-8 dengan benar
+    w = csv.writer(buf)
+    w.writerow(['Order ID', 'Nama', 'Email', 'Harga', 'Status', 'Terkirim', 'Catatan', 'Dibuat (WIB)'])
+    for r in rows:
+        w.writerow([
+            r['order_id'], r['nama'], r['email'], r['harga'], r['status'],
+            'ya' if r['terkirim'] else 'tidak',
+            (r['catatan'] if 'catatan' in r.keys() else '') or '',
+            time.strftime('%Y-%m-%d %H:%M', time.gmtime(r['created_at'] + 7 * 3600)),
+        ])
+
+    nama_file = time.strftime('order-diahbakehouse-%Y%m%d.csv', time.gmtime())
+    return Response(buf.getvalue(), mimetype='text/csv',
+                    headers={'Content-Disposition': f'attachment; filename={nama_file}'})
 
 
 # ─────────────────────────────────────────

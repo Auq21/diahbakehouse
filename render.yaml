@@ -1,0 +1,65 @@
+# Blueprint Render — deploy otomatis.
+# Cara pakai: push repo ke GitHub → Render → New → Blueprint → pilih repo ini.
+# Nilai sync:false TIDAK diisi di sini (rahasia) — isi manual di dashboard Render.
+services:
+  - type: web
+    name: diahbakehouse
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore              # paling dekat dengan Indonesia
+    plan: free                     # gratis; "tidur" saat idle, dibangunkan UptimeRobot
+    healthCheckPath: /
+    autoDeploy: true
+
+    # Penyimpanan permanen untuk database SQLite (orders.db).
+    # Tanpa ini, data order hilang setiap kali deploy ulang.
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+
+    envVars:
+      # SQLite diarahkan ke disk permanen di atas
+      - key: DATABASE_PATH
+        value: /data/orders.db
+
+      # Dibuat otomatis oleh Render (string acak aman)
+      - key: SECRET_KEY
+        generateValue: true
+
+      - key: FLASK_DEBUG
+        value: "0"
+
+      # ── Produk ──
+      - key: HARGA_EBOOK
+        value: "29000"
+
+      # ── Midtrans (isi manual di dashboard — RAHASIA) ──
+      - key: MIDTRANS_IS_PROD
+        value: "true"
+      - key: MIDTRANS_SERVER_KEY
+        sync: false
+      - key: MIDTRANS_CLIENT_KEY
+        sync: false
+
+      # ── Email via Resend (HTTPS, tidak kena blokir SMTP) ──
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        value: Diah Bakehouse <ebook@diahbakehouse.my.id>
+      - key: MAIL_REPLY_TO
+        value: mardiahbakehouse@gmail.com
+
+      # ── Admin (isi manual — RAHASIA) ──
+      - key: ADMIN_KEY
+        sync: false
+
+      # ── Kontak (tampil di halaman info) ──
+      - key: KONTAK_EMAIL
+        value: mardiahbakehouse@gmail.com
+      - key: KONTAK_WA
+        sync: false
+      - key: KONTAK_ALAMAT
+        sync: false
+      - key: KONTAK_JAM
+        value: Senin–Sabtu, 08.00–20.00 WIB

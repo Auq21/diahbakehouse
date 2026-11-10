@@ -28,6 +28,25 @@
   .st.pending { background: #FFF4DB; color: #8a5a00; }
   .st.expire, .st.cancel, .st.deny, .st.failure { background: #fde8e4; color: #9b2c16; }
   .hint { font-size: 12px; color: #9C6A45; margin-top: 8px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat { background: #fff; border: 1px solid #E8D5C4; border-radius: 12px; padding: 14px 16px; }
+  .stat .n { font-size: 22px; font-weight: 700; color: #3D1608; line-height: 1.2; }
+  .stat .l { font-size: 12px; color: #9C6A45; margin-top: 2px; }
+  .stat.hl { background: #5C2D0A; border-color: #5C2D0A; }
+  .stat.hl .n, .stat.hl .l { color: #fff; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .toolbar form { display: flex; gap: 8px; flex: 1; min-width: 220px; }
+  .toolbar input[type=search] { flex: 1; width: auto; padding: 8px 12px; font-size: 14px; }
+  .toolbar select { padding: 8px 10px; border: 1.5px solid #E0C8B4; border-radius: 8px; font: inherit; font-size: 14px; }
+  .toolbar .btn { margin: 0; }
+  .toolbar .btn.ghost { background: #fff; color: #5C2D0A; border: 1.5px solid #E0C8B4; }
+  .links { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pager { display: flex; gap: 8px; align-items: center; justify-content: center; margin-top: 16px; font-size: 13px; color: #9C6A45; }
+  .pager a { padding: 6px 12px; border: 1.5px solid #E0C8B4; border-radius: 8px; text-decoration: none; color: #5C2D0A; font-weight: 600; }
+  .pager a[aria-disabled=true] { opacity: .4; pointer-events: none; }
+  .catatan { color: #9C6A45; font-size: 12px; white-space: normal; max-width: 180px; }
 </style>
 </head>
 <body>
@@ -36,6 +55,31 @@
   <p class="sub">Halaman ini rahasia — jangan bagikan link-nya.</p>
 
   {% if pesan %}<div class="msg {{ 'ok' if sukses else 'err' }}">{{ pesan }}</div>{% endif %}
+
+  {% if stat %}
+  <div class="stats">
+    <div class="stat hl">
+      <div class="n">Rp {{ '{:,.0f}'.format(stat.pendapatan).replace(',', '.') }}</div>
+      <div class="l">Total pendapatan ({{ stat.lunas }} lunas)</div>
+    </div>
+    <div class="stat">
+      <div class="n">Rp {{ '{:,.0f}'.format(stat.pendapatan_hari_ini).replace(',', '.') }}</div>
+      <div class="l">Hari ini · {{ stat.order_hari_ini }} order</div>
+    </div>
+    <div class="stat">
+      <div class="n">{{ stat.pending }}</div>
+      <div class="l">Pending (belum bayar)</div>
+    </div>
+    <div class="stat">
+      <div class="n">{{ stat.gagal }}</div>
+      <div class="l">Gagal / batal</div>
+    </div>
+    <div class="stat">
+      <div class="n">{{ stat.belum_terkirim }}</div>
+      <div class="l">Lunas, ebook belum terkirim</div>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="card">
     <h2>📩 Kirim ebook manual</h2>
@@ -52,10 +96,30 @@
   </div>
 
   <div class="card">
-    <h2>🧾 30 order terakhir</h2>
+    <h2>🧾 Daftar order{% if total_filtered is defined %} ({{ total_filtered }}){% endif %}</h2>
+
+    <div class="toolbar">
+      <form method="get" action="/admin">
+        <input type="hidden" name="key" value="{{ key }}">
+        <input type="search" name="q" value="{{ cari }}" placeholder="Cari nama, email, atau Order ID…">
+        <select name="status" onchange="this.form.submit()">
+          <option value=""        {{ 'selected' if filter_status == '' }}>Semua status</option>
+          <option value="lunas"   {{ 'selected' if filter_status == 'lunas' }}>Lunas</option>
+          <option value="pending" {{ 'selected' if filter_status == 'pending' }}>Pending</option>
+          <option value="gagal"   {{ 'selected' if filter_status == 'gagal' }}>Gagal / batal</option>
+        </select>
+        <button type="submit" class="btn">Cari</button>
+        {% if cari or filter_status %}<a class="btn ghost" href="/admin?key={{ key|urlencode }}">Reset</a>{% endif %}
+      </form>
+      <div class="links">
+        <a class="btn ghost" href="/admin/export.csv?key={{ key|urlencode }}">⬇ Export CSV</a>
+        <a class="btn ghost" href="/admin/cek-midtrans?key={{ key|urlencode }}" target="_blank">Cek Midtrans</a>
+      </div>
+    </div>
+
     <div class="table-wrap">
     <table>
-      <tr><th>Waktu</th><th>Order ID</th><th>Nama</th><th>Email</th><th>Status</th><th>Email</th><th></th></tr>
+      <tr><th>Waktu</th><th>Order ID</th><th>Nama</th><th>Email</th><th>Status</th><th>Kirim</th><th>Catatan</th><th></th></tr>
       {% for o in orders %}
       <tr>
         <td>{{ o.waktu }}</td>
@@ -64,13 +128,23 @@
         <td>{{ o.email }}</td>
         <td><span class="st {{ o.status }}">{{ o.status }}</span></td>
         <td>{{ '✅' if o.terkirim else '—' }}</td>
+        <td class="catatan">{{ o.catatan or '' }}</td>
         <td>{% if o.status in ('settlement','capture','manual') %}<a class="btn kecil" href="/admin/kirim-ulang/{{ o.order_id }}?key={{ key|urlencode }}">Kirim ulang</a>{% endif %}</td>
       </tr>
       {% else %}
-      <tr><td colspan="7">Belum ada order.</td></tr>
+      <tr><td colspan="8">Tidak ada order yang cocok.</td></tr>
       {% endfor %}
     </table>
     </div>
+
+    {% if total_hal and total_hal > 1 %}
+    <div class="pager">
+      {% set qs = 'key=' ~ (key|urlencode) ~ ('&q=' ~ (cari|urlencode) if cari) ~ ('&status=' ~ filter_status if filter_status) %}
+      <a href="/admin?{{ qs }}&hal={{ hal - 1 }}" aria-disabled="{{ 'true' if hal <= 1 else 'false' }}">← Sebelumnya</a>
+      <span>Halaman {{ hal }} dari {{ total_hal }}</span>
+      <a href="/admin?{{ qs }}&hal={{ hal + 1 }}" aria-disabled="{{ 'true' if hal >= total_hal else 'false' }}">Berikutnya →</a>
+    </div>
+    {% endif %}
   </div>
 </div>
 </body>
