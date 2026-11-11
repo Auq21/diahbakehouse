@@ -76,17 +76,74 @@ EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
 
 
 # ─────────────────────────────────────────
-# DATABASE (SQLite) — menyimpan nama/email per order.
+# DATABASE — menyimpan nama/email per order.
 # Penting: notifikasi Midtrans TIDAK membawa customer_details,
 # jadi nama & email harus kita simpan sendiri saat /beli.
+#
+# Mode otomatis:
+#   - Ada DATABASE_URL (Render/produksi)  → PostgreSQL (data permanen)
+#   - Tidak ada (develop lokal di Windows) → SQLite (file orders.db)
 # ─────────────────────────────────────────
+DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+# Render kadang memberi skema lama "postgres://" — psycopg butuh "postgresql://"
+if DATABASE_URL.startswith('postgres://'):
+    DATABASE_URL = 'postgresql://' + DATABASE_URL[len('postgres://'):]
+PAKAI_POSTGRES = bool(DATABASE_URL)
+
+
+class DBWrapper:
+    """
+    Pembungkus koneksi agar kode query tetap sama untuk SQLite & Postgres:
+      - placeholder '?' otomatis jadi '%s' saat Postgres
+      - .execute(...) mengembalikan cursor (punya .fetchone/.fetchall)
+      - baris bisa diakses seperti dict: row['nama']
+    Dipakai dengan: with closing(db()) as conn, conn: ...
+    """
+    def __init__(self, conn, is_pg):
+        self._conn, self._pg = conn, is_pg
+
+    def execute(self, sql, params=()):
+        if self._pg:
+            sql = sql.replace('?', '%s')
+        cur = self._conn.cursor()
+        cur.execute(sql, params)
+        return cur
+
+    # dukung "with closing(db()) as conn, conn:" (context manager = transaksi)
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        if exc_type:
+            self._conn.rollback()
+        else:
+            self._conn.commit()
+        return False
+
+    def commit(self):
+        self._conn.commit()
+
+    def rollback(self):
+        self._conn.rollback()
+
+    def close(self):
+        self._conn.close()
+
+
 def db():
+    if PAKAI_POSTGRES:
+        import psycopg2
+        import psycopg2.extras
+        conn = psycopg2.connect(DATABASE_URL, cursor_factory=psycopg2.extras.RealDictCursor)
+        return DBWrapper(conn, is_pg=True)
     conn = sqlite3.connect(app.config['DATABASE_PATH'], timeout=10)
     conn.row_factory = sqlite3.Row
-    return conn
+    return DBWrapper(conn, is_pg=False)
 
 
 def init_db():
+    # Tipe kolom auto-increment/waktu sedikit beda antar engine, tapi
+    # skema di bawah kompatibel untuk kedua-duanya.
     with closing(db()) as conn, conn:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS orders (
@@ -97,22 +154,27 @@ def init_db():
                 status      TEXT NOT NULL DEFAULT 'pending',
                 terkirim    INTEGER NOT NULL DEFAULT 0,
                 created_at  INTEGER NOT NULL,
-                updated_at  INTEGER NOT NULL
+                updated_at  INTEGER NOT NULL,
+                catatan     TEXT DEFAULT ''
             )
         """)
 
 
-init_db()
-
-
 def migrasi_db():
-    """Tambah kolom baru tanpa menghapus data lama."""
-    with closing(db()) as conn, conn:
-        kolom = [r['name'] for r in conn.execute('PRAGMA table_info(orders)')]
-        if 'catatan' not in kolom:
-            conn.execute("ALTER TABLE orders ADD COLUMN catatan TEXT DEFAULT ''")
+    """Tambah kolom 'catatan' kalau tabel lama belum punya (idempoten)."""
+    try:
+        with closing(db()) as conn, conn:
+            if PAKAI_POSTGRES:
+                conn.execute("ALTER TABLE orders ADD COLUMN IF NOT EXISTS catatan TEXT DEFAULT ''")
+            else:
+                kolom = [r['name'] for r in conn.execute('PRAGMA table_info(orders)').fetchall()]
+                if 'catatan' not in kolom:
+                    conn.execute("ALTER TABLE orders ADD COLUMN catatan TEXT DEFAULT ''")
+    except Exception:
+        app.logger.exception('migrasi_db gagal (lanjut saja)')
 
 
+init_db()
 migrasi_db()
 
 
@@ -409,7 +471,7 @@ def admin():
             "COALESCE(SUM(CASE WHEN status IN ('settlement','capture','manual') THEN harga ELSE 0 END),0) AS rp "
             "FROM orders WHERE created_at >= ?", (awal_hari_ini,)).fetchone()
 
-        total_filtered = conn.execute(f'SELECT COUNT(*) FROM orders {klausa}', params).fetchone()[0]
+        total_filtered = conn.execute(f'SELECT COUNT(*) AS n FROM orders {klausa}', params).fetchone()['n']
         rows = conn.execute(
             f'SELECT * FROM orders {klausa} ORDER BY created_at DESC LIMIT ? OFFSET ?',
             params + [per_hal, (hal - 1) * per_hal]).fetchall()

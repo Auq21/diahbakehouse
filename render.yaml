@@ -11,18 +11,11 @@ services:
     healthCheckPath: /
     autoDeploy: true
 
-    # Penyimpanan permanen untuk database SQLite (orders.db).
-    # Tanpa ini, data order hilang setiap kali deploy ulang.
-    disk:
-      name: data
-      mountPath: /data
-      sizeGB: 1
+    # CATATAN: persistent disk TIDAK tersedia di free tier Render.
+    # Dengan SQLite tanpa disk, orders.db ter-reset saat app restart/deploy.
+    # Untuk data permanen yang gratis, gunakan Render Postgres (lihat README).
 
     envVars:
-      # SQLite diarahkan ke disk permanen di atas
-      - key: DATABASE_PATH
-        value: /data/orders.db
-
       # Dibuat otomatis oleh Render (string acak aman)
       - key: SECRET_KEY
         generateValue: true
