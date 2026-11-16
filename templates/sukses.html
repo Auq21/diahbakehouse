@@ -20,6 +20,11 @@
   .tips li { margin-left: 18px; margin-bottom: 4px; }
   .btn { display: inline-block; margin-top: 8px; padding: 12px 24px; background: #5C2D0A; color: #fff; text-decoration: none; border-radius: 100px; font-weight: 500; }
   .btn.alt { background: transparent; color: #5C2D0A; border: 1.5px solid #5C2D0A; }
+  .aksi { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 8px; }
+  .aksi .btn { margin-top: 0; }
+  .tips a { color: #A0522D; font-weight: 600; }
+  .nav-bawah { margin-top: 18px; font-size: 12px; }
+  .nav-bawah a { color: #7A3212; }
   .state { display: none; }
   .state.on { display: block; }
 </style>
@@ -57,8 +62,11 @@
     <li>Belum masuk juga? Hubungi kami di halaman <a href="/kontak">Kontak</a> dan sertakan Order ID di atas.</li>
   </ul>
 
-  <a href="https://instagram.com/diah_bakehouse" target="_blank" rel="noopener" class="btn alt">Follow @diah_bakehouse</a>
-  <p style="margin-top:18px;font-size:12px"><a href="/kontak" style="color:#7A3212">Kontak</a> · <a href="/kebijakan-refund" style="color:#7A3212">Kebijakan Refund</a></p>
+  <div class="aksi">
+    <a href="/" class="btn">← Kembali ke Beranda</a>
+    <a href="https://instagram.com/diah_bakehouse" target="_blank" rel="noopener" class="btn alt">Follow @diah_bakehouse</a>
+  </div>
+  <p class="nav-bawah"><a href="/">Beranda</a> · <a href="/kontak">Kontak</a> · <a href="/syarat-ketentuan">Syarat &amp; Ketentuan</a> · <a href="/kebijakan-refund">Kebijakan Refund</a></p>
 </div>
 
 <script>
