@@ -66,7 +66,7 @@ app.config.update(
     NAMA_PRODUK         = 'Ebook Brownies Lumer Cup — @diah_bakehouse',
 
     # Lain-lain
-    ADMIN_KEY           = os.environ.get('ADMIN_KEY', ''),
+    ADMIN_KEY           = os.environ.get('ADMIN_KEY', '').strip().strip('"\'').strip(),
     DATABASE_PATH       = os.environ.get('DATABASE_PATH', 'orders.db'),
 )
 
@@ -372,7 +372,7 @@ def cek_status(order_id):
 # ─────────────────────────────────────────
 def cek_admin():
     key = app.config['ADMIN_KEY']
-    if not key or request.args.get('key') != key:
+    if not key or (request.args.get('key') or '').strip() != key:
         abort(404)
 
 
