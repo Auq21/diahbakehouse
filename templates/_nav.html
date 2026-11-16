@@ -1,0 +1,29 @@
+<style>
+  .topnav { position: sticky; top: 0; z-index: 50; background: rgba(42,16,6,.94); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); border-bottom: 1px solid rgba(245,192,122,.18); font-family: 'Poppins', system-ui, sans-serif; }
+  .topnav-in { max-width: 960px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .topnav-brand { color: #FDF6EE; text-decoration: none; font-weight: 600; font-size: 15px; white-space: nowrap; margin-right: auto; }
+  .topnav-brand span { color: #F5C07A; }
+  .topnav-links { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+  .topnav-links a { color: #E8B79A; text-decoration: none; font-size: 13.5px; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+  .topnav-links a:hover, .topnav-links a.aktif { color: #FDF6EE; background: rgba(255,255,255,.08); }
+  .topnav-links a.cta { background: #F5C07A; color: #3D1608; font-weight: 600; }
+  .topnav-links a.cta:hover { background: #ffd79a; }
+  @media (max-width: 560px) {
+    .topnav-in { gap: 6px; padding: 8px 12px; }
+    .topnav-links { width: 100%; justify-content: space-between; }
+    .topnav-links a { font-size: 12.5px; padding: 5px 7px; }
+  }
+</style>
+<nav class="topnav" aria-label="Navigasi utama">
+  <div class="topnav-in">
+    <a class="topnav-brand" href="/">🍫 Diah <span>Bakehouse</span></a>
+    <div class="topnav-links">
+      <a href="/" {% if aktif == 'beranda' %}class="aktif"{% endif %}>Beranda</a>
+      <a href="/#isi">Isi Ebook</a>
+      {% if ada_galeri %}<a href="/#galeri">Galeri</a>{% endif %}
+      <a href="/#faq">FAQ</a>
+      <a href="/kontak" {% if aktif == 'kontak' %}class="aktif"{% endif %}>Kontak</a>
+      <a href="/#beli" class="cta">Beli Ebook</a>
+    </div>
+  </div>
+</nav>

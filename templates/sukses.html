@@ -8,9 +8,10 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(160deg, #3D1608 0%, #7A3212 45%, #A0522D 100%); padding: 24px 16px; color: #2a1a0e;
+    font-family: 'Poppins', sans-serif; min-height: 100vh; display: flex; flex-direction: column;
+    background: linear-gradient(160deg, #3D1608 0%, #7A3212 45%, #A0522D 100%); color: #2a1a0e;
   }
+  .tengah { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
   .card { background: #FDF6EE; max-width: 480px; width: 100%; border-radius: 20px; padding: 36px 28px; text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.3); }
   .emoji { font-size: 56px; }
   h1 { font-family: 'Playfair Display', serif; color: #3D1608; font-size: 28px; margin: 10px 0 8px; }
@@ -30,6 +31,8 @@
 </style>
 </head>
 <body>
+{% include "_nav.html" %}
+<main class="tengah">
 <div class="card">
 
   <!-- LUNAS -->
@@ -68,6 +71,7 @@
   </div>
   <p class="nav-bawah"><a href="/">Beranda</a> · <a href="/kontak">Kontak</a> · <a href="/syarat-ketentuan">Syarat &amp; Ketentuan</a> · <a href="/kebijakan-refund">Kebijakan Refund</a></p>
 </div>
+</main>
 
 <script>
 (function () {

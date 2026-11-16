@@ -243,6 +243,34 @@ def get_snap():
 # ─────────────────────────────────────────
 # ROUTES
 # ─────────────────────────────────────────
+# ─────────────────────────────────────────
+# GALERI FOTO — taruh foto di static/galeri/ (jpg/png/webp).
+# Urutan = urutan nama file (01-..., 02-...). Keterangan foto diambil dari nama file:
+#   '01-brownies-topping-keju.jpg' → 'Brownies topping keju'
+# ─────────────────────────────────────────
+GALERI_DIR = os.path.join(app.root_path, 'static', 'galeri')
+
+
+def daftar_galeri():
+    try:
+        files = sorted(f for f in os.listdir(GALERI_DIR)
+                       if f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')) and not f.startswith('.'))
+    except FileNotFoundError:
+        return []
+    hasil = []
+    for f in files:
+        judul = re.sub(r'^\d+[-_ .]*', '', os.path.splitext(f)[0])
+        judul = re.sub(r'[-_]+', ' ', judul).strip()
+        hasil.append({'url': url_for('static', filename='galeri/' + f),
+                      'judul': judul[:1].upper() + judul[1:] if judul else 'Brownies Lumer Cup — Diah Bakehouse'})
+    return hasil
+
+
+@app.context_processor
+def inject_galeri():
+    return {'ada_galeri': bool(daftar_galeri())}
+
+
 @app.route('/')
 def index():
     """Landing page penjualan ebook."""
@@ -252,6 +280,7 @@ def index():
         produk     = app.config['NAMA_PRODUK'],
         client_key = app.config['MIDTRANS_CLIENT_KEY'],
         is_prod    = app.config['MIDTRANS_IS_PROD'],
+        galeri     = daftar_galeri(),
     )
 
 

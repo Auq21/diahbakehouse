@@ -16,6 +16,7 @@
     --karamel: #F5C07A; --peach: #D4956A; --krem: #FDF6EE; --latar: #f5f0eb; --teks: #2a1a0e;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; } section[id] { scroll-margin-top: 64px; }
   body { font-family: 'Poppins', sans-serif; background: var(--latar); color: var(--teks); line-height: 1.6; }
   a { color: inherit; }
 
@@ -89,6 +90,7 @@
 </style>
 </head>
 <body>
+{% with aktif="beranda" %}{% include "_nav.html" %}{% endwith %}
 
 <header class="hero">
   <div class="brand">Resep Original · Anti Gagal · Siap Jual</div>
@@ -104,7 +106,7 @@
   <a href="#beli" class="btn-hero">Dapatkan Ebooknya →</a>
 </header>
 
-<section>
+<section id="isi">
   <div class="wrap">
     <h2>Isi Ebook</h2>
     <p class="sub">Panduan lengkap dari bahan sampai siap jual</p>
@@ -117,7 +119,9 @@
   </div>
 </section>
 
-<section style="padding-top:0">
+{% include "_galeri.html" %}
+
+<section>
   <div class="wrap">
     <h2>Cocok Untuk Kamu Yang…</h2>
     <p class="sub">&nbsp;</p>
@@ -160,7 +164,7 @@
   </div>
 </section>
 
-<section>
+<section id="faq">
   <div class="wrap">
     <h2>Pertanyaan Umum</h2>
     <p class="sub">&nbsp;</p>

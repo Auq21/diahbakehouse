@@ -1,0 +1,145 @@
+{% if galeri %}
+<style>
+  .galeri { padding: 56px 0; background: #fff; }
+  .galeri h2 { font-family: 'Playfair Display', serif; font-size: 30px; color: #3D1608; text-align: center; margin-bottom: 8px; }
+  .galeri .sub { text-align: center; color: #9C6A45; margin-bottom: 28px; }
+  .g-track { list-style: none; margin: 0; padding: 0; }
+  .g-item { position: relative; overflow: hidden; border-radius: 14px; background: #F5E6D3; cursor: zoom-in; }
+  .g-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+  .g-item:hover img { transform: scale(1.05); }
+  .g-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; font-size: 12.5px; color: #fff;
+           background: linear-gradient(to top, rgba(30,10,3,.75), transparent); opacity: 0; transition: opacity .3s; }
+  .g-item:hover .g-cap { opacity: 1; }
+  .g-more { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(42,16,6,.6);
+            color: #FDF6EE; font-weight: 600; font-size: 20px; }
+  .g-dots { display: none; }
+
+  /* ── Laptop: kolase ── */
+  @media (min-width: 761px) {
+    .g-track { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 190px; gap: 12px; }
+    .g-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+    .g-item:nth-child(6) { grid-column: span 2; }
+    .g-item.g-hide-desk { display: none; }
+    /* kolase menyesuaikan jumlah foto supaya tidak ada kotak kosong */
+    .g-track.g-n1 { grid-template-columns: 1fr; grid-auto-rows: 440px; }
+    .g-track.g-n1 .g-item:nth-child(1) { grid-column: auto; grid-row: auto; }
+    .g-track.g-n2 { grid-template-columns: 1fr 1fr; grid-auto-rows: 360px; }
+    .g-track.g-n2 .g-item:nth-child(1) { grid-column: auto; grid-row: auto; }
+    .g-track.g-n3 { grid-template-columns: 2fr 1fr; grid-auto-rows: 200px; }
+    .g-track.g-n3 .g-item:nth-child(1) { grid-column: auto; grid-row: span 2; }
+    .g-track.g-n4 .g-item:nth-child(4) { grid-column: span 2; }
+    .g-track.g-n6 .g-item:nth-child(6) { grid-column: span 4; }
+    .g-track.g-n7 .g-item:nth-child(7) { grid-column: span 2; }
+  }
+  /* ── HP: slideshow geser + otomatis ── */
+  @media (max-width: 760px) {
+    .g-track { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+               -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 2px; }
+    .g-track::-webkit-scrollbar { display: none; }
+    .g-item { flex: 0 0 86%; aspect-ratio: 4 / 5; scroll-snap-align: center; }
+    .g-cap { opacity: 1; }
+    .g-more { display: none; }
+    .g-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+    .g-dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; background: #E0C8B4; cursor: pointer; }
+    .g-dots button.on { background: #7A3212; width: 20px; border-radius: 4px; }
+  }
+  /* ── Lightbox ── */
+  .lb { position: fixed; inset: 0; z-index: 100; background: rgba(15,6,2,.94); display: none; align-items: center; justify-content: center; flex-direction: column; }
+  .lb.on { display: flex; }
+  .lb img { max-width: 92vw; max-height: 78vh; border-radius: 10px; object-fit: contain; }
+  .lb p { color: #F5C07A; margin-top: 12px; font-size: 14px; text-align: center; padding: 0 16px; }
+  .lb button { position: absolute; background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 50%; width: 46px; height: 46px; font-size: 24px; cursor: pointer; }
+  .lb button:hover { background: rgba(255,255,255,.25); }
+  .lb .x { top: 16px; right: 16px; }
+  .lb .kiri { left: 12px; top: 50%; transform: translateY(-50%); }
+  .lb .kanan { right: 12px; top: 50%; transform: translateY(-50%); }
+  .lb .n { position: absolute; top: 24px; left: 20px; color: #E8B79A; font-size: 13px; }
+</style>
+
+<section class="galeri" id="galeri">
+  <div class="wrap">
+    <h2>Hasil Nyata dari Dapur Diah</h2>
+    <p class="sub">Foto asli Brownies Lumer Cup — tanpa filter berlebihan 🤎</p>
+
+    {% set MAKS = 7 %}
+    <ul class="g-track g-n{{ galeri|length if galeri|length < 7 else 7 }}" id="gTrack">
+      {% for f in galeri %}
+      <li class="g-item{% if loop.index > MAKS %} g-hide-desk{% endif %}" data-i="{{ loop.index0 }}">
+        <img src="{{ f.url }}" alt="{{ f.judul }}" loading="lazy" decoding="async">
+        <span class="g-cap">{{ f.judul }}</span>
+        {% if loop.index == MAKS and galeri|length > MAKS %}<span class="g-more">+{{ galeri|length - MAKS }} foto</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="g-dots" id="gDots">
+      {% for f in galeri %}<button type="button" aria-label="Foto {{ loop.index }}" data-i="{{ loop.index0 }}"></button>{% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto brownies">
+  <span class="n" id="lbN"></span>
+  <button class="x" type="button" aria-label="Tutup">✕</button>
+  <button class="kiri" type="button" aria-label="Sebelumnya">‹</button>
+  <img id="lbImg" alt="">
+  <p id="lbCap"></p>
+  <button class="kanan" type="button" aria-label="Berikutnya">›</button>
+</div>
+
+<script>
+(function () {
+  const FOTO = {{ galeri|tojson }};
+  const track = document.getElementById('gTrack');
+  const items = [...track.querySelectorAll('.g-item')];
+  const dots  = [...document.querySelectorAll('#gDots button')];
+  const hp = () => window.matchMedia('(max-width: 760px)').matches;
+
+  // ── Slideshow HP ──
+  let aktif = 0, timer = null, sentuh = false;
+  function geser(i) {
+    aktif = (i + items.length) % items.length;
+    const it = items[aktif];
+    track.scrollTo({ left: it.offsetLeft - (track.clientWidth - it.clientWidth) / 2, behavior: 'smooth' });
+  }
+  function tandai() {
+    const tengah = track.scrollLeft + track.clientWidth / 2;
+    let best = 0, jarak = 1e9;
+    items.forEach((it, i) => { const d = Math.abs(it.offsetLeft + it.clientWidth / 2 - tengah); if (d < jarak) { jarak = d; best = i; } });
+    aktif = best; dots.forEach((d, i) => d.classList.toggle('on', i === best));
+  }
+  function mulai() { stop(); if (hp() && items.length > 1) timer = setInterval(() => { if (!sentuh) geser(aktif + 1); }, 3500); }
+  function stop() { if (timer) clearInterval(timer); timer = null; }
+  track.addEventListener('scroll', () => requestAnimationFrame(tandai), { passive: true });
+  track.addEventListener('touchstart', () => { sentuh = true; }, { passive: true });
+  track.addEventListener('touchend', () => { setTimeout(() => sentuh = false, 4000); }, { passive: true });
+  dots.forEach(d => d.addEventListener('click', () => geser(+d.dataset.i)));
+  window.addEventListener('resize', mulai);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(e => e[0].isIntersecting ? mulai() : stop(), { threshold: .3 }).observe(track);
+  } else { mulai(); }
+  tandai();
+
+  // ── Lightbox ──
+  const lb = document.getElementById('lb'), img = document.getElementById('lbImg'),
+        cap = document.getElementById('lbCap'), num = document.getElementById('lbN');
+  let li = 0;
+  function buka(i) { li = (i + FOTO.length) % FOTO.length; img.src = FOTO[li].url; img.alt = FOTO[li].judul;
+                     cap.textContent = FOTO[li].judul; num.textContent = (li + 1) + ' / ' + FOTO.length;
+                     lb.classList.add('on'); document.body.style.overflow = 'hidden'; stop(); }
+  function tutup() { lb.classList.remove('on'); document.body.style.overflow = ''; mulai(); }
+  items.forEach(it => it.addEventListener('click', () => buka(+it.dataset.i)));
+  lb.querySelector('.x').onclick = tutup;
+  lb.querySelector('.kiri').onclick = e => { e.stopPropagation(); buka(li - 1); };
+  lb.querySelector('.kanan').onclick = e => { e.stopPropagation(); buka(li + 1); };
+  lb.addEventListener('click', e => { if (e.target === lb) tutup(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('on')) return;
+    if (e.key === 'Escape') tutup(); if (e.key === 'ArrowLeft') buka(li - 1); if (e.key === 'ArrowRight') buka(li + 1);
+  });
+  let x0 = null;
+  lb.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
+  lb.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) buka(li + (dx < 0 ? 1 : -1)); x0 = null; }, { passive: true });
+})();
+</script>
+{% endif %}
