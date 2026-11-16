@@ -6,12 +6,15 @@
   .topnav-links { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
   .topnav-links a { color: #E8B79A; text-decoration: none; font-size: 13.5px; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
   .topnav-links a:hover, .topnav-links a.aktif { color: #FDF6EE; background: rgba(255,255,255,.08); }
-  .topnav-links a.cta { background: #F5C07A; color: #3D1608; font-weight: 600; }
-  .topnav-links a.cta:hover { background: #ffd79a; }
+  .topnav-cta { background: #F5C07A; color: #3D1608; font-weight: 600; text-decoration: none; font-size: 13.5px; padding: 7px 14px; border-radius: 8px; white-space: nowrap; }
+  .topnav-cta:hover { background: #ffd79a; }
   @media (max-width: 560px) {
     .topnav-in { gap: 6px; padding: 8px 12px; }
-    .topnav-links { width: 100%; justify-content: space-between; }
+    .topnav-links { width: 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: 2px; }
+    .topnav-links::-webkit-scrollbar { display: none; }
     .topnav-links a { font-size: 12.5px; padding: 5px 7px; }
+    .topnav-links { order: 3; }
+    .topnav-cta { font-size: 12.5px; padding: 6px 12px; }
   }
 </style>
 <nav class="topnav" aria-label="Navigasi utama">
@@ -23,7 +26,7 @@
       {% if ada_galeri %}<a href="/#galeri">Galeri</a>{% endif %}
       <a href="/#faq">FAQ</a>
       <a href="/kontak" {% if aktif == 'kontak' %}class="aktif"{% endif %}>Kontak</a>
-      <a href="/#beli" class="cta">Beli Ebook</a>
     </div>
+    <a href="/#beli" class="topnav-cta">Beli Ebook</a>
   </div>
 </nav>

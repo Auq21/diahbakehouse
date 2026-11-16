@@ -9,7 +9,7 @@ services:
     region: singapore              # paling dekat dengan Indonesia
     plan: free                     # gratis; "tidur" saat idle, dibangunkan UptimeRobot
     healthCheckPath: /
-    autoDeploy: true
+    autoDeployTrigger: commit      # deploy otomatis setiap push ke branch main
 
     # CATATAN: persistent disk TIDAK tersedia di free tier Render.
     # Dengan SQLite tanpa disk, orders.db ter-reset saat app restart/deploy.
