@@ -1,0 +1,7 @@
+Folder ini berisi foto galeri yang tampil di beranda website.
+Jangan taruh foto mentah dari HP di sini — jalankan dulu:  python kompres_foto.py
+(script itu mengambil foto dari folder foto_asli/ lalu menyimpan versi kecil di sini).
+
+Urutan tampil = urutan nama file. Foto pertama tampil paling besar di kolase.
+Keterangan foto diambil dari nama file, contoh:
+  01-brownies-lumer-topping-keju.jpg  ->  "Brownies lumer topping keju"

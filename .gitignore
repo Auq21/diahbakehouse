@@ -23,3 +23,6 @@ env/
 Thumbs.db
 .vscode/
 .idea/
+
+# Foto asli galeri (besar) — yang di-upload hanya hasil kompres di static/galeri
+foto_asli/
