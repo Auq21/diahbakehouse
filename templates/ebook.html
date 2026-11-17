@@ -537,6 +537,23 @@
   .modal-tbl .mrow:last-child { border-bottom: none; }
   .modal-tbl .mlab { padding: 10px 12px 10px 18px; color: #6B4423; vertical-align: middle; }
   .modal-tbl .mval { padding: 10px 18px 10px 8px; font-weight: 600; color: #3D1608; text-align: right; white-space: nowrap; vertical-align: middle; width: 1%; }
+  /* ───── FOTO DI EBOOK ───── */
+  .cover-foto { width: 62mm; height: 62mm; margin: 0 auto 9mm; border: 2mm solid #F5C07A; border-radius: 7mm; overflow: hidden; transform: rotate(-3deg); }
+  .cover-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .eg-utama { position: relative; height: 92mm; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+  .eg-utama img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .eg-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 14px 10px; color: #fff; font-size: 13px; font-weight: 600;
+            background: linear-gradient(to top, rgba(30,10,3,.75), rgba(30,10,3,0)); }
+  .eg-grid { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; margin-bottom: 14px; }
+  .eg-grid td { vertical-align: top; padding: 0 5px; }
+  .eg-grid td:first-child { padding-left: 0; } .eg-grid td:last-child { padding-right: 0; }
+  .eg-kecil { height: 80mm; border-radius: 10px; overflow: hidden; }
+  .eg-kecil.eg-k3 { height: 62mm; } .eg-kecil.eg-k4 { height: 50mm; }
+  .eg-kecil img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .eg-cap2 { font-size: 11.5px; color: #6B4423; margin-top: 5px; text-align: center; }
+  .eg-tips { background: #FDF6EE; border: 1px solid #E8D5C4; border-radius: 10px; padding: 12px 18px; }
+  .eg-tips h4 { font-size: 14px; color: #3D1608; margin-bottom: 6px; }
+  .eg-tips ul { margin-left: 18px; } .eg-tips li { font-size: 12.5px; color: #6B4423; line-height: 1.55; margin-bottom: 3px; }
 </style>
 </head>
 <body>
@@ -548,7 +565,7 @@
     <div class="cover">
       <div class="cover-inner">
         <div class="cover-brand">Resep Original · Anti Gagal · Siap Jual</div>
-        <span class="cover-emoji">🍫</span>
+        {% if hero %}<div class="cover-foto"><img src="{{ hero }}" alt="Brownies Lumer Cup"></div>{% else %}<span class="cover-emoji">🍫</span>{% endif %}
         <h1 class="cover-title">Brownies<br><span>Lumer</span> Cup</h1>
         <p class="cover-tagline">"Lumer di Mulut, Nagih Banget!"</p>
         <div class="cover-divider"></div>
@@ -768,6 +785,48 @@
     <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
   </div>
 
+  {% if foto %}
+  <!-- ══ PAGE 5: GALERI FOTO ══ -->
+  <div class="page">
+    <div class="page-inner">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h2>Galeri Hasil Diah</h2>
+          <p>Foto asli Brownies Lumer Cup — begini hasil yang bisa kamu capai</p>
+        </div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 05</div>
+      </div>
+
+      <div class="eg-utama">
+        <img src="{{ foto[0].src }}" alt="{{ foto[0].judul }}">
+        <div class="eg-cap">{{ foto[0].judul }}</div>
+      </div>
+      {% set sisa = foto[1:5] %}
+      {% if sisa %}
+      <table class="eg-grid"><tr>
+        {% for f in sisa %}
+        <td style="width:{{ (100 / sisa|length)|round(2) }}%">
+          <div class="eg-kecil {{ 'eg-k' ~ sisa|length }}"><img src="{{ f.src }}" alt="{{ f.judul }}"></div>
+          <div class="eg-cap2">{{ f.judul }}</div>
+        </td>
+        {% endfor %}
+      </tr></table>
+      {% endif %}
+
+      <div class="eg-tips">
+        <h4>📸 Tips foto produk untuk jualan</h4>
+        <ul>
+          <li><b>Cahaya alami</b> — foto dekat jendela siang hari, hindari lampu kuning.</li>
+          <li><b>Tampilkan lumernya</b> — ambil dari atas atau sudut 45° supaya kilau saus terlihat.</li>
+          <li><b>Properti sederhana</b> — talenan kayu + taburan chocochip, oreo, atau keju di sekitar cup.</li>
+          <li><b>Foto stok siap kirim</b> — deretan cup rapi meyakinkan pembeli bahwa kamu siap pesanan banyak.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="page-footer"><span>@diah_bakehouse</span><span>Brownies Lumer Cup · Resep Original</span></div>
+  </div>
+  {% endif %}
+
   <!-- ══ PAGE 5: TIPS & FAQ ══ -->
   <div class="page">
     <div class="page-inner">
@@ -776,7 +835,7 @@
           <h2>Tips Anti Gagal &amp; FAQ</h2>
           <p>Baca ini sebelum mulai — hemat waktu dan hindari kegagalan</p>
         </div>
-        <div class="page-logo"><span>@diah_bakehouse</span>hal. 05</div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 06</div>
       </div>
 
       <div class="section-title">6 Tips Anti Gagal</div>
@@ -810,7 +869,7 @@
           <h2>Modal &amp; Hitungan Untung</h2>
           <p>Harga belanja aktual Diah — tinggal sesuaikan dengan harga di daerahmu</p>
         </div>
-        <div class="page-logo"><span>@diah_bakehouse</span>hal. 06</div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 07</div>
       </div>
 
       <div class="section-title">Rincian Modal per Resep (± 18 cup)</div>
@@ -859,7 +918,7 @@
           <h2>Belajar Lebih Dalam Bareng Diah</h2>
           <p>Konsultasi pribadi, komunitas, sampai live baking session</p>
         </div>
-        <div class="page-logo"><span>@diah_bakehouse</span>hal. 07</div>
+        <div class="page-logo"><span>@diah_bakehouse</span>hal. 08</div>
       </div>
 
       <div style="background:linear-gradient(135deg,#3D1608 0%,#7A3212 100%);border-radius:12px;padding:20px 24px;margin-bottom:20px;text-align:center;">

@@ -261,7 +261,7 @@ def daftar_galeri():
     for f in files:
         judul = re.sub(r'^\d+[-_ .]*', '', os.path.splitext(f)[0])
         judul = re.sub(r'[-_]+', ' ', judul).strip()
-        hasil.append({'url': url_for('static', filename='galeri/' + f),
+        hasil.append({'url': '/static/galeri/' + f,  # tanpa url_for: aman dipakai di thread email
                       'judul': judul[:1].upper() + judul[1:] if judul else 'Brownies Lumer Cup — Diah Bakehouse'})
     return hasil
 
@@ -411,7 +411,7 @@ def preview_ebook():
     cek_admin()
     if request.args.get('pdf'):
         return Response(generate_pdf('Preview Admin', 'DBH-PREVIEW'), mimetype='application/pdf')
-    return render_template('ebook.html', nama='Preview Admin', order_id='DBH-PREVIEW')
+    return render_template('ebook.html', nama='Preview Admin', order_id='DBH-PREVIEW', **foto_ebook())
 
 
 @app.route('/admin/kirim-ulang/<order_id>')
@@ -606,11 +606,21 @@ def cek_midtrans():
 # ─────────────────────────────────────────
 # FUNGSI BANTU
 # ─────────────────────────────────────────
+def foto_ebook():
+    """Foto untuk PDF ebook: path relatif ke folder app (dipakai WeasyPrint & preview HTML)."""
+    foto = []
+    for f in daftar_galeri():
+        nama_file = f['url'].rsplit('/', 1)[-1]
+        foto.append({'src': 'static/galeri/' + nama_file, 'judul': f['judul']})
+    hero = 'static/img/hero-brownies.jpg'
+    return {'foto': foto, 'hero': hero if os.path.exists(os.path.join(app.root_path, hero)) else None}
+
+
 def generate_pdf(nama=None, order_id=None):
     """Render template ebook → bytes PDF (dipersonalisasi nama buyer)."""
     from weasyprint import HTML  # import lambat, lihat catatan di atas
-    html_string = render_template('ebook.html', nama=nama, order_id=order_id)
-    return HTML(string=html_string, base_url=app.root_path).write_pdf()
+    html_string = render_template('ebook.html', nama=nama, order_id=order_id, **foto_ebook())
+    return HTML(string=html_string, base_url=app.root_path + os.sep).write_pdf()
 
 
 def kirim_email_resend(email, subject, html, text, pdf_bytes, filename):
